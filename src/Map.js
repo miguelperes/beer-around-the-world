@@ -4,7 +4,8 @@ import marker from "./marker.png";
 
 const googleMapsKey = process.env.REACT_APP_GOOGLE_MAPS_KEY;
 
-const Marker = () => <img src={marker} />;
+const markerOffset = {transform: 'translate(-50%, -100%)'}
+const Marker = () => <img style={markerOffset} src={marker} />;
 
 export default class Map extends Component {
   static defaultProps = {
@@ -14,7 +15,7 @@ export default class Map extends Component {
 
   render() {
     const { markers } = this.props;
-    
+
     return (
       // Important! Always set the container height explicitly
       <div style={{ height: "100vh", width: "100%" }}>
