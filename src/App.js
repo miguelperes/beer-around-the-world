@@ -12,16 +12,21 @@ class App extends Component {
     super();
 
     this.state = {
-      checkins: ""
+      username: "Untappd username",
+      checkins: []
     };
   }
 
-  handleClick = () => {
+  handleClick = event => {
+    event.preventDefault();
     axios
       .get(
-        `https://api.untappd.com/v4/user/checkins/miguelpc?client_id=${untappdId}&client_secret=${untappdKey}`
+        `https://api.untappd.com/v4/user/checkins/${
+          this.state.username
+        }?client_id=${untappdId}&client_secret=${untappdKey}`
       )
       .then(response => {
+        console.log("response", response);
         this.setState({ checkins: response.data.response.checkins.items });
       });
   };
@@ -42,13 +47,25 @@ class App extends Component {
   };
 
   render() {
-    const markers = this.getLocations(checkins);
+    const markers = this.getLocations(this.state.checkins);
 
     return (
-      <div>
-        <div>BEER AROUND THE WORLD</div>
-        <button onClick={this.handleClick}>Click Me</button>
-        <div style={{ height: "100%", width: "100%" }}>
+      <div className="flex flex-column mr1 ml1">
+        <div className="f2 center">Beer Around the World!</div>
+
+        <form className="center mv2" onSubmit={this.handleClick}>
+          <input
+            type="text"
+            value={this.state.username}
+            onChange={event => this.setState({ username: event.target.value })}
+            onFocus={() => this.setState({ username: "" })}
+          />
+          <button className="ml2" onClick={this.handleClick}>
+            Find Beers!
+          </button>
+        </form>
+
+        <div className="h-50">
           <Map markers={markers} />
         </div>
       </div>
