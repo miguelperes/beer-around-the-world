@@ -3,9 +3,9 @@ import "./App.css";
 import Map from "./Map";
 import axios from "axios";
 import ReactLoading from "react-loading";
+import queryString from "query-string";
 
 const untappdId = process.env.REACT_APP_UNTAPPD_ID;
-const untappdKey = process.env.REACT_APP_UNTAPPD_KEY;
 
 class Main extends Component {
   constructor() {
@@ -15,8 +15,15 @@ class Main extends Component {
       username: "Untappd username",
       checkins: [],
       checkinRequestError: false,
-      loadingCheckins: false
+      loadingCheckins: false,
+      token: null
     };
+  }
+
+  componentDidMount() {
+    const { access_token } = queryString.parse(this.props.location.hash);
+
+    if (access_token) this.setState({ token: access_token });
   }
 
   handleClick = event => {
@@ -26,7 +33,7 @@ class Main extends Component {
       .get(
         `https://api.untappd.com/v4/user/checkins/${
           this.state.username
-        }?client_id=${untappdId}&client_secret=${untappdKey}&limit=50`
+        }?access_token=${this.state.token}&limit=50`
       )
       .then(
         response => {
@@ -63,6 +70,17 @@ class Main extends Component {
       <div className="flex flex-column mr1 ml1">
         <div className="f2 center">Beer Around the World!</div>
 
+        {this.state.token === null && (
+          <button className="ml2 mv2 w-10 center">
+            <a
+              href={`https://untappd.com/oauth/authenticate/?client_id=${untappdId}&response_type=token&redirect_url=https://beer-around-the-world.herokuapp.com/`}
+            >
+              Login
+            </a>
+          </button>
+        )}
+
+        {this.state.token !== null &&
         <div className="flex flex-row justify-center items-center center mt2">
           <form className="center" onSubmit={this.handleClick}>
             <input
@@ -78,7 +96,7 @@ class Main extends Component {
           <button className="ml2" onClick={this.handleClick}>
             Find Beers!
           </button>
-          
+
           {this.state.loadingCheckins && (
             <ReactLoading
               className="ml2"
@@ -89,7 +107,7 @@ class Main extends Component {
             />
           )}
         </div>
-
+        }
         {this.state.checkinRequestError && (
           <div className="center f7 dark-red mt1">
             (Error: Unable to get checkins)

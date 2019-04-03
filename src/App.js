@@ -1,17 +1,13 @@
-import React from 'react';
+import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Main from './Main';
+import Main from "./Main";
 
 const App = () => {
   return (
     <Switch>
-      <Route exact path="/" component={Main} />
-      {/* <Route
-        path="/about"
-        render={props => <About {...props} extra={someVariable} />}
-      /> */}
+      <Route path="/" render={props => <Main {...props} />} />
     </Switch>
   );
-}
+};
 
 export default App;
