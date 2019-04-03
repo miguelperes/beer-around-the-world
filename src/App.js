@@ -22,7 +22,7 @@ class App extends Component {
 
   handleClick = event => {
     event.preventDefault();
-    this.setState({ loadingCheckins: true });
+    this.setState({ loadingCheckins: true, checkinRequestError: false });
     axios
       .get(
         `https://api.untappd.com/v4/user/checkins/${
@@ -69,14 +69,26 @@ class App extends Component {
             <input
               type="text"
               value={this.state.username}
-              onChange={event =>this.setState({ username: event.target.value })}
+              onChange={event =>
+                this.setState({ username: event.target.value })
+              }
               onFocus={() => this.setState({ username: "" })}
             />
           </form>
-            <button className="ml2" onClick={this.handleClick}>
-              Find Beers!
-            </button>
-            { this.state.loadingCheckins && <ReactLoading className="ml2" type="spin" color="#ffff00" height={25} width={25}/> }
+
+          <button className="ml2" onClick={this.handleClick}>
+            Find Beers!
+          </button>
+          
+          {this.state.loadingCheckins && (
+            <ReactLoading
+              className="ml2"
+              type="spin"
+              color="#ffff00"
+              height={25}
+              width={25}
+            />
+          )}
         </div>
 
         {this.state.checkinRequestError && (
