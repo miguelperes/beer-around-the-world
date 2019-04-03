@@ -3,7 +3,6 @@ import "./App.css";
 import Map from "./Map";
 import axios from "axios";
 import ReactLoading from "react-loading";
-import { checkins } from "./globals";
 
 const untappdId = process.env.REACT_APP_UNTAPPD_ID;
 const untappdKey = process.env.REACT_APP_UNTAPPD_KEY;
