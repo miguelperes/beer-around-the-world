@@ -27,7 +27,7 @@ class App extends Component {
       .get(
         `https://api.untappd.com/v4/user/checkins/${
           this.state.username
-        }?client_id=${untappdId}&client_secret=${untappdKey}`
+        }?client_id=${untappdId}&client_secret=${untappdKey}&limit=50`
       )
       .then(
         response => {
