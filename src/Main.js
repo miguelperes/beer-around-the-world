@@ -7,7 +7,7 @@ import ReactLoading from "react-loading";
 const untappdId = process.env.REACT_APP_UNTAPPD_ID;
 const untappdKey = process.env.REACT_APP_UNTAPPD_KEY;
 
-class App extends Component {
+class Main extends Component {
   constructor() {
     super();
 
@@ -104,4 +104,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Main;
