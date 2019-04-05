@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import "./App.css";
 import Map from "./Map";
-import axios from "axios";
+
 import ReactLoading from "react-loading";
 import queryString from "query-string";
+
+import {fetchUserCheckins} from "./untappdAPI"
 
 const untappdId = process.env.REACT_APP_UNTAPPD_ID;
 
@@ -22,30 +24,18 @@ class Main extends Component {
 
   componentDidMount() {
     const { access_token } = queryString.parse(this.props.location.hash);
-
     if (access_token) this.setState({ token: access_token });
   }
 
-  handleClick = event => {
+  handleClick = async event => {
     event.preventDefault();
-    this.setState({ loadingCheckins: true, checkinRequestError: false });
-    axios
-      .get(
-        `https://api.untappd.com/v4/user/checkins/${
-          this.state.username
-        }?access_token=${this.state.token}&limit=50`
-      )
-      .then(
-        response => {
-          this.setState({ checkins: response.data.response.checkins.items });
-          this.setState({ loadingCheckins: false });
-        },
-        error => {
-          console.log(error.response);
-          this.setState({ checkinRequestError: true });
-          this.setState({ loadingCheckins: false });
-        }
-      );
+
+    this.setState({ loadingCheckins: true, checkinRequestError: false });    
+    const checkins = await fetchUserCheckins(this.state.username, this.state.token)
+
+    checkins
+    ? this.setState({ checkins: checkins, loadingCheckins: false })
+    : this.setState({ checkinRequestError: true, loadingCheckins: false })
   };
 
   getLocations = checkins => {
