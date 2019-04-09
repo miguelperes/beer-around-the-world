@@ -47,7 +47,7 @@ class Main extends Component {
   };
 
   render() {
-    const {venuesInfo} = this.state
+    const { venuesInfo } = this.state;
 
     return (
       <div className="flex flex-column mr1 ml1">

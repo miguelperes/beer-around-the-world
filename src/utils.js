@@ -1,7 +1,5 @@
 export function organizeVenues(checkins) {
-  return checkins
-    .filter(checkinHasVenue)
-    .reduce(groupByVenue, {});
+  return checkins.filter(checkinHasVenue).reduce(groupByVenue, {});
 }
 
 function checkinHasVenue(checkin) {
@@ -17,7 +15,7 @@ function groupByVenue(venues, currentCheckin) {
   }
 
   venues[venueId] = {
-    venue_info: { ...currentCheckin.venue },
+    venueInfo: { ...currentCheckin.venue },
     checkins: [currentCheckin]
   };
 

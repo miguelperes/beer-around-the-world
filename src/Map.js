@@ -24,12 +24,13 @@ export default class Map extends Component {
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >
-          {venues && Object.entries(venues).map(([id, data], index) => {
-            const lat = data.venue_info.location.lat
-            const lng = data.venue_info.location.lng
-            
-            return <Marker key={index} lat={lat} lng={lng} />;
-          })}
+          {venues &&
+            Object.entries(venues).map(([id, data], index) => {
+              const lat = data.venueInfo.location.lat;
+              const lng = data.venueInfo.location.lng;
+
+              return <Marker key={index} lat={lat} lng={lng} />;
+            })}
         </GoogleMapReact>
       </div>
     );
