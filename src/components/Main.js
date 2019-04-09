@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "../App.css";
 import Map from "./Map";
+import VenueDetails from "./VenueDetails";
 
 import ReactLoading from "react-loading";
 import queryString from "query-string";
@@ -15,11 +16,13 @@ class Main extends Component {
     super();
 
     this.state = {
+      token: null,
       username: "Untappd username",
       venuesInfo: [],
+      selectedVenue: null,
       checkinRequestError: false,
       loadingCheckins: false,
-      token: null
+      showVenue: false
     };
   }
 
@@ -45,8 +48,13 @@ class Main extends Component {
       : this.setState({ checkinRequestError: true, loadingCheckins: false });
   };
 
+  selectVenue = venue =>
+    this.setState({ selectedVenue: venue, showVenue: true });
+
+  closeVenueDetails = () => this.setState({ showVenue: false });
+
   render() {
-    const { venuesInfo } = this.state;
+    const { venuesInfo, showVenue, selectedVenue } = this.state;
 
     return (
       <div className="flex flex-column mr1 ml1">
@@ -96,8 +104,14 @@ class Main extends Component {
           </div>
         )}
 
+        <VenueDetails
+          display={showVenue}
+          venueInfo={venuesInfo[selectedVenue]}
+          onClose={this.closeVenueDetails}
+        />
+
         <div className="h-50 mt3">
-          <Map venues={venuesInfo} />
+          <Map venues={venuesInfo} onMarkerClick={this.selectVenue} />
         </div>
       </div>
     );
