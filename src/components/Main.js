@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import "./App.css";
+import "../App.css";
 import Map from "./Map";
 
 import ReactLoading from "react-loading";
 import queryString from "query-string";
 
-import { fetchUserCheckins } from "./untappdAPI";
-import { organizeVenues } from "./utils";
+import { fetchUserCheckins } from "../utils/untappdAPI";
+import { organizeVenues } from "../utils/utility";
 
 const untappdId = process.env.REACT_APP_UNTAPPD_ID;
 

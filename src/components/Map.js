@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
-import marker from "./marker.png";
+import marker from "../images/marker.png";
 
 const googleMapsKey = process.env.REACT_APP_GOOGLE_MAPS_KEY;
 
