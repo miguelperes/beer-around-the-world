@@ -16,7 +16,7 @@ class Main extends Component {
 
     this.state = {
       username: "Untappd username",
-      checkins: [],
+      venuesInfo: [],
       checkinRequestError: false,
       loadingCheckins: false,
       token: null
@@ -40,7 +40,6 @@ class Main extends Component {
     checkins
       ? this.setState({
           venuesInfo: organizeVenues(checkins),
-          checkins: checkins,
           loadingCheckins: false
         })
       : this.setState({ checkinRequestError: true, loadingCheckins: false });
