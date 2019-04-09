@@ -4,8 +4,8 @@ import marker from "./marker.png";
 
 const googleMapsKey = process.env.REACT_APP_GOOGLE_MAPS_KEY;
 
-const markerOffset = {transform: 'translate(-50%, -100%)'}
-const Marker = () => <img style={markerOffset} src={marker} alt='Map Marker' />;
+const markerOffset = { transform: "translate(-50%, -100%)" };
+const Marker = () => <img style={markerOffset} src={marker} alt="Map Marker" />;
 
 export default class Map extends Component {
   static defaultProps = {
@@ -14,19 +14,22 @@ export default class Map extends Component {
   };
 
   render() {
-    const { markers } = this.props;
+    const { venues } = this.props;
 
     return (
       // Important! Always set the container height explicitly
-      <div className='vh-75 w-100 center'>
+      <div className="vh-75 w-100 center">
         <GoogleMapReact
           bootstrapURLKeys={{ key: googleMapsKey }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >
-          {markers.map((marker, index) => (
-            <Marker key={index} lat={marker.lat} lng={marker.lng} />
-          ))}
+          {venues && Object.entries(venues).map(([id, data], index) => {
+            const lat = data.venue_info.location.lat
+            const lng = data.venue_info.location.lng
+            
+            return <Marker key={index} lat={lat} lng={lng} />;
+          })}
         </GoogleMapReact>
       </div>
     );

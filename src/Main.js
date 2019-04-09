@@ -5,7 +5,8 @@ import Map from "./Map";
 import ReactLoading from "react-loading";
 import queryString from "query-string";
 
-import {fetchUserCheckins} from "./untappdAPI"
+import { fetchUserCheckins } from "./untappdAPI";
+import { organizeVenues } from "./utils";
 
 const untappdId = process.env.REACT_APP_UNTAPPD_ID;
 
@@ -30,31 +31,23 @@ class Main extends Component {
   handleClick = async event => {
     event.preventDefault();
 
-    this.setState({ loadingCheckins: true, checkinRequestError: false });    
-    const checkins = await fetchUserCheckins(this.state.username, this.state.token)
+    this.setState({ loadingCheckins: true, checkinRequestError: false });
+    const checkins = await fetchUserCheckins(
+      this.state.username,
+      this.state.token
+    );
 
     checkins
-    ? this.setState({ checkins: checkins, loadingCheckins: false })
-    : this.setState({ checkinRequestError: true, loadingCheckins: false })
-  };
-
-  getLocations = checkins => {
-    return checkins
-      .map(checkin => {
-        if (checkin.venue !== [] && checkin.venue.location) {
-          return {
-            lat: checkin.venue.location.lat,
-            lng: checkin.venue.location.lng
-          };
-        } else {
-          return null;
-        }
-      })
-      .filter(location => location != null);
+      ? this.setState({
+          venuesInfo: organizeVenues(checkins),
+          checkins: checkins,
+          loadingCheckins: false
+        })
+      : this.setState({ checkinRequestError: true, loadingCheckins: false });
   };
 
   render() {
-    const markers = this.getLocations(this.state.checkins);
+    const {venuesInfo} = this.state
 
     return (
       <div className="flex flex-column mr1 ml1">
@@ -70,34 +63,34 @@ class Main extends Component {
           </button>
         )}
 
-        {this.state.token !== null &&
-        <div className="flex flex-row justify-center items-center center mt2">
-          <form className="center" onSubmit={this.handleClick}>
-            <input
-              type="text"
-              value={this.state.username}
-              onChange={event =>
-                this.setState({ username: event.target.value })
-              }
-              onFocus={() => this.setState({ username: "" })}
-            />
-          </form>
+        {this.state.token !== null && (
+          <div className="flex flex-row justify-center items-center center mt2">
+            <form className="center" onSubmit={this.handleClick}>
+              <input
+                type="text"
+                value={this.state.username}
+                onChange={event =>
+                  this.setState({ username: event.target.value })
+                }
+                onFocus={() => this.setState({ username: "" })}
+              />
+            </form>
 
-          <button className="ml2" onClick={this.handleClick}>
-            Find Beers!
-          </button>
+            <button className="ml2" onClick={this.handleClick}>
+              Find Beers!
+            </button>
 
-          {this.state.loadingCheckins && (
-            <ReactLoading
-              className="ml2"
-              type="spin"
-              color="#ffff00"
-              height={25}
-              width={25}
-            />
-          )}
-        </div>
-        }
+            {this.state.loadingCheckins && (
+              <ReactLoading
+                className="ml2"
+                type="spin"
+                color="#ffff00"
+                height={25}
+                width={25}
+              />
+            )}
+          </div>
+        )}
         {this.state.checkinRequestError && (
           <div className="center f7 dark-red mt1">
             (Error: Unable to get checkins)
@@ -105,7 +98,7 @@ class Main extends Component {
         )}
 
         <div className="h-50 mt3">
-          <Map markers={markers} />
+          <Map venues={venuesInfo} />
         </div>
       </div>
     );
