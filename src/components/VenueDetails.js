@@ -18,6 +18,7 @@ class VenueDetails extends Component {
 
   componentWillMount() {
     document.addEventListener("mousedown", this.handleClick);
+    document.addEventListener("touchstart", this.handleClick);
   }
 
   componentDidUpdate() {
@@ -26,6 +27,7 @@ class VenueDetails extends Component {
 
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.handleClick);
+    document.removeEventListener("touchstart", this.handleClick);
   }
 
   render() {
@@ -35,7 +37,7 @@ class VenueDetails extends Component {
       return (
         <div
           className={
-            "absolute absolute-fill w-60 h-50 ml-auto mr-auto z-999 bg-white outline-0 br2"
+            "absolute absolute-fill w-100 w-40-l w-60-m  h-50 ml-auto mr-auto z-999 bg-white outline-0 br2"
           }
           style={{
             transform: "translate(-50%, -50%)",
