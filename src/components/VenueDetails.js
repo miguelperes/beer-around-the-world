@@ -11,18 +11,18 @@ class VenueDetails extends Component {
   };
 
   handleKeyDown = event => {
-    if(event.key === "Escape") {
+    if (event.key === "Escape") {
       this.props.onClose();
     }
-  }
+  };
 
   componentWillMount() {
     document.addEventListener("mousedown", this.handleClick);
   }
 
   componentDidUpdate() {
-    this.node && this.node.focus()
-  }  
+    this.node && this.node.focus();
+  }
 
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.handleClick);
@@ -35,7 +35,7 @@ class VenueDetails extends Component {
       return (
         <div
           className={
-            "absolute absolute-fill w-75 h-50 ml-auto mr-auto z-999 bg-white outline-0"
+            "absolute absolute-fill w-60 h-50 ml-auto mr-auto z-999 bg-white outline-0 br2"
           }
           style={{
             transform: "translate(-50%, -50%)",
@@ -47,7 +47,7 @@ class VenueDetails extends Component {
           tabIndex={0}
         >
           <VenueDetailsHeader venueInfo={venueInfo.venueInfo} />
-
+          <hr className="black br1"/>
           <VenueDetailsBody checkins={venueInfo.checkins} />
         </div>
       );

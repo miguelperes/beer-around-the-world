@@ -18,7 +18,7 @@ const Marker = ({ onClick, venueId }) => (
 class Map extends Component {
   static defaultProps = {
     center: { lat: -22.906847, lng: -43.172897 },
-    zoom: 7
+    zoom: 0
   };
 
   render() {

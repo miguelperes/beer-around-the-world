@@ -6,13 +6,13 @@ const VenueDetailsHeader = ({ venueInfo }) => {
 
   return (
     <header className="flex justify-center items-center">
-      <img className="mt2 mr4" src={venue_icon.sm} alt="Venue Icon" />
+      <img className="mv2 mr1" src={venue_icon.sm} alt="Venue Icon" />
       <div className="w-75 flex flex-column">
-        <p className="w-100 tc f3 mv3">{venue_name}</p>
-        <p className="w-100 tc f7">
+        <span className="w-100 tc f2">{venue_name}</span>
+        <span className="w-100 tc f7 mv1">
           {location.venue_city} - {location.venue_state} -{" "}
           {location.venue_country}
-        </p>
+        </span>
       </div>
     </header>
   );
