@@ -11,30 +11,32 @@ class VenueDetailsBody extends Component {
 
     return (
       <div className="ml1 mt1 overflow-y-scroll h-75">
-        
-        {/* <span className="mv2 f3">Checkins:</span> */}
+        {checkins.map((checkin, index) => {
+          const beer = checkin.beer;
+          const brewery = checkin.brewery
 
-        {checkins.map((checkin, index) => (
-          <div className="flex flex-row mv2 ml2" key={index}>
-            <img
-              className="db mw-15 h-auto"
-              style={{maxWidth: "100px", maxHeight: "100px"}}
-              src={checkin.beer.beer_label}
-              alt="Beer Label"
-            />
-            <div className="ml2 flex flex-column" key={index}>
-              <span className="f4 b">{checkin.beer.beer_name}</span>
-              <span className="f5">
-                Brewery: {checkin.brewery.brewery_name}
-              </span>
-              <span className="f5">Style: {checkin.beer.beer_style}</span>
-              <span className="f5">Rating: {checkin.rating_score}/5</span>
-              <span className="f5">
-                Date: {this.formatDate(checkin.created_at)}
-              </span>
+          return (
+            <div className="flex flex-row mv2 ml2" key={index}>
+              <img
+                className="db mw-15 h-auto"
+                style={{ maxWidth: "100px", maxHeight: "100px" }}
+                src={beer.beer_label}
+                alt="Beer Label"
+              />
+              <div className="ml2 flex flex-column" key={index}>
+                <span className="f4 b">{beer.beer_name}</span>
+                <span className="f5">
+                  Brewery: {brewery.brewery_name} ({brewery.country_name})
+                </span>
+                <span className="f5">Style: {beer.beer_style}</span>
+                <span className="f5">Rating: {checkin.rating_score}/5</span>
+                <span className="f5">
+                  Date: {this.formatDate(checkin.created_at)}
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     );
   }
