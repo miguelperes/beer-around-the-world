@@ -42,9 +42,9 @@ class Main extends Component {
 
     checkins
       ? this.setState({
-          venuesInfo: organizeVenues(checkins),
-          loadingCheckins: false
-        })
+        venuesInfo: organizeVenues(checkins),
+        loadingCheckins: false
+      })
       : this.setState({ checkinRequestError: true, loadingCheckins: false });
   };
 
@@ -66,7 +66,7 @@ class Main extends Component {
               href={`https://untappd.com/oauth/authenticate/?client_id=${untappdId}&response_type=token&redirect_url=https://beer-around-the-world.herokuapp.com/`}
             >
               Login
-            </a>
+              </a>
           </button>
         )}
 
@@ -85,7 +85,7 @@ class Main extends Component {
 
             <button className="ml2" onClick={this.handleClick}>
               Find Beers!
-            </button>
+              </button>
 
             {this.state.loadingCheckins && (
               <ReactLoading
@@ -101,7 +101,7 @@ class Main extends Component {
         {this.state.checkinRequestError && (
           <div className="center f7 dark-red mt1">
             (Error: Unable to get checkins)
-          </div>
+            </div>
         )}
 
         <VenueDetails
@@ -110,7 +110,7 @@ class Main extends Component {
           onClose={this.closeVenueDetails}
         />
 
-        <div className="h-50 mt3">
+        <div className="h-100 w-100">
           <Map venues={venuesInfo} onMarkerClick={this.selectVenue} />
         </div>
       </div>
