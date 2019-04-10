@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import VenueDetailsHeader from "./VenueDetailsHeader";
+import VenueDetailsBody from "./VenueDetailsBody";
 
 class VenueDetails extends Component {
   handleClick = event => {
@@ -45,17 +46,9 @@ class VenueDetails extends Component {
           onKeyDown={this.handleKeyDown}
           tabIndex={0}
         >
-        <VenueDetailsHeader venueInfo={venueInfo.venueInfo}/>
+          <VenueDetailsHeader venueInfo={venueInfo.venueInfo} />
 
-          <span>Checkins:</span>
-          <div className="ml1">
-            {venueInfo.checkins.map((checkin, index) => (
-              <div className="mv2" key={index}>
-                {checkin.beer.beer_name} - {checkin.beer.beer_style} -{" "}
-                {checkin.rating_score}/5 - {checkin.created_at}
-              </div>
-            ))}
-          </div>
+          <VenueDetailsBody checkins={venueInfo.checkins} />
         </div>
       );
     }
