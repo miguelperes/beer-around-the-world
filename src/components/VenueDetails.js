@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import VenueDetailsHeader from "./VenueDetailsHeader";
 
 class VenueDetails extends Component {
   handleClick = event => {
@@ -44,23 +45,7 @@ class VenueDetails extends Component {
           onKeyDown={this.handleKeyDown}
           tabIndex={0}
         >
-          <header className="flex justify-center items-center">
-            <img
-              className="mt2 mr4"
-              src={venueInfo.venueInfo.venue_icon.sm}
-              alt="Venue Icon"
-            />
-            <div className="w-75 flex flex-column">
-              <p className="w-100 tc f3 mv3">
-                {venueInfo.venueInfo.venue_name}
-              </p>
-              <p className="w-100 tc f7">
-                {venueInfo.venueInfo.location.venue_city} -{" "}
-                {venueInfo.venueInfo.location.venue_state} -{" "}
-                {venueInfo.venueInfo.location.venue_country}
-              </p>
-            </div>
-          </header>
+        <VenueDetailsHeader venueInfo={venueInfo.venueInfo}/>
 
           <span>Checkins:</span>
           <div className="ml1">
