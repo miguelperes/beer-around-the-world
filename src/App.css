@@ -23,6 +23,21 @@
   color: #61dafb;
 }
 
+.Main-search-bar {
+  border-radius: 0px 0px 10px 10px;
+  left: 0;
+  right: 0;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #ffcf0dda;
+}
+
+.Main-search-bar-title {
+  color: #84491f;
+  font-weight: bold;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
