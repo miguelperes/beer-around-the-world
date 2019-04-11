@@ -6,8 +6,8 @@ import VenueDetails from "./VenueDetails";
 import ReactLoading from "react-loading";
 import queryString from "query-string";
 
-import { fetchUserCheckins } from "../utils/untappdAPI";
-import { organizeVenues } from "../utils/utility";
+import { fetchUserCheckins, fetchNextCheckins } from "../utils/untappdAPI";
+import { organizeVenues, concatVenues } from "../utils/utility";
 
 const untappdId = process.env.REACT_APP_UNTAPPD_ID;
 
@@ -33,12 +33,10 @@ class Main extends Component {
 
   handleClick = async event => {
     event.preventDefault();
-
+    const {username, token} = this.state
     this.setState({ loadingCheckins: true, checkinRequestError: false });
-    const checkins = await fetchUserCheckins(
-      this.state.username,
-      this.state.token
-    );
+
+    const { nextPageUrl, checkins } = await fetchUserCheckins(username, token);
 
     checkins
       ? this.setState({
@@ -46,12 +44,31 @@ class Main extends Component {
         loadingCheckins: false
       })
       : this.setState({ checkinRequestError: true, loadingCheckins: false });
+
+      this.getNextCheckins(3, nextPageUrl, token) // Get more 150 checkins
   };
 
   selectVenue = venue =>
     this.setState({ selectedVenue: venue, showVenue: true });
 
   closeVenueDetails = () => this.setState({ showVenue: false });
+
+  // move to untappdAPI file?
+  async getNextCheckins(pagesNumber, nextPageUrl, token) {
+    let venues = this.state.venuesInfo
+    let nextUrl = nextPageUrl
+    
+    while(pagesNumber > 0 && nextUrl !== "") {
+      const pageResult = await fetchNextCheckins(nextUrl, token);
+      const formattedResult = organizeVenues(pageResult.nextCheckins);
+      nextUrl = pageResult.nextUrl
+      
+      venues = concatVenues(venues, formattedResult)    
+      this.setState({venuesInfo: venues})
+
+      pagesNumber--
+    }
+  }
 
   render() {
     const { venuesInfo, showVenue, selectedVenue } = this.state;
