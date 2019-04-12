@@ -42,9 +42,9 @@ class Main extends Component {
 
     checkins
       ? this.setState({
-          venuesInfo: organizeVenues(checkins),
-          loadingCheckins: false
-        })
+        venuesInfo: organizeVenues(checkins),
+        loadingCheckins: false
+      })
       : this.setState({ checkinRequestError: true, loadingCheckins: false });
   };
 
@@ -57,52 +57,55 @@ class Main extends Component {
     const { venuesInfo, showVenue, selectedVenue } = this.state;
 
     return (
-      <div className="flex flex-column mr1 ml1">
-        <div className="f2 center">Beer Around the World!</div>
+      <div className="flex flex-column">
+        <div className="absolute z-1 w-100 flex">
+          <div className="Main-search-bar pa3 tc">
+            <div className="f2 tc Main-search-bar-title">Beer Around the World!</div>
 
-        {this.state.token === null && (
-          <button className="ml2 mv2 w-10 center">
-            <a
-              href={`https://untappd.com/oauth/authenticate/?client_id=${untappdId}&response_type=token&redirect_url=https://beer-around-the-world.herokuapp.com/`}
-            >
-              Login
-            </a>
-          </button>
-        )}
+            {this.state.token === null && (
+              <a className="f6 link dim br2 ph3 pv2 mb2 dib white bg-black"
+                href={`https://untappd.com/oauth/authenticate/?client_id=${untappdId}&response_type=token&redirect_url=https://beer-around-the-world.herokuapp.com/`}
+              >
+                Login
+              </a>
+            )}
 
-        {this.state.token !== null && (
-          <div className="flex flex-row justify-center items-center center mt2">
-            <form className="center" onSubmit={this.handleClick}>
-              <input
-                type="text"
-                value={this.state.username}
-                onChange={event =>
-                  this.setState({ username: event.target.value })
-                }
-                onFocus={() => this.setState({ username: "" })}
-              />
-            </form>
+            {this.state.token !== null && (
+              <div className="flex flex-row justify-center items-center center mt2">
+                <form className="center" onSubmit={this.handleClick}>
+                  <input
+                    type="text"
+                    className="ba b--black-20 pa1 mb1"
+                    value={this.state.username}
+                    onChange={event =>
+                      this.setState({ username: event.target.value })
+                    }
+                    onFocus={() => this.setState({ username: "" })}
+                  />
+                  <button className="ml2 f6 link dim br2 ph3 pv2 mb2 dib white bn bg-black"
+                    onClick={this.handleClick}>
+                    Find Beers!
+                  </button>
+                </form>
 
-            <button className="ml2" onClick={this.handleClick}>
-              Find Beers!
-            </button>
-
-            {this.state.loadingCheckins && (
-              <ReactLoading
-                className="ml2"
-                type="spin"
-                color="#ffff00"
-                height={25}
-                width={25}
-              />
+                {this.state.loadingCheckins && (
+                  <ReactLoading
+                    className="ml2 self-start"
+                    type="spin"
+                    color="#ffff00"
+                    height={30}
+                    width={30}
+                  />
+                )}
+              </div>
+            )}
+            {this.state.checkinRequestError && (
+              <div className="center f7 dark-red mt1">
+                (Error: Unable to get checkins)
+            </div>
             )}
           </div>
-        )}
-        {this.state.checkinRequestError && (
-          <div className="center f7 dark-red mt1">
-            (Error: Unable to get checkins)
-          </div>
-        )}
+        </div>
 
         <VenueDetails
           display={showVenue}
@@ -110,7 +113,7 @@ class Main extends Component {
           onClose={this.closeVenueDetails}
         />
 
-        <div className="h-50 mt3">
+        <div className="h-100 w-100">
           <Map venues={venuesInfo} onMarkerClick={this.selectVenue} />
         </div>
       </div>
