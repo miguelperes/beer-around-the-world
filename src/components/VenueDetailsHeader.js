@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import CloseButton from "./CloseButton";
 
-const VenueDetailsHeader = ({ venueInfo }) => {
+const VenueDetailsHeader = ({ venueInfo, handleClose }) => {
   const { venue_name, venue_icon, location } = venueInfo;
 
   return (
@@ -14,12 +15,14 @@ const VenueDetailsHeader = ({ venueInfo }) => {
           {location.venue_country}
         </span>
       </div>
+      <CloseButton handleClick={handleClose}/>
     </header>
   );
 };
 
 VenueDetailsHeader.propTypes = {
-  venueInfo: PropTypes.object.isRequired
+  venueInfo: PropTypes.object.isRequired,
+  handleClose: PropTypes.func
 };
 
 export default VenueDetailsHeader;

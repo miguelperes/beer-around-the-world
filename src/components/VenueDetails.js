@@ -31,7 +31,7 @@ class VenueDetails extends Component {
   }
 
   render() {
-    const { venueInfo, display } = this.props;
+    const { venueInfo, display, onClose } = this.props;
 
     if (display) {
       return (
@@ -48,7 +48,7 @@ class VenueDetails extends Component {
           onKeyDown={this.handleKeyDown}
           tabIndex={0}
         >
-          <VenueDetailsHeader venueInfo={venueInfo.venueInfo} />
+          <VenueDetailsHeader venueInfo={venueInfo.venueInfo} handleClose={onClose}/>
           <hr className="black br1"/>
           <VenueDetailsBody checkins={venueInfo.checkins} />
         </div>
