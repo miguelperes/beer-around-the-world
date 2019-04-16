@@ -31,13 +31,13 @@ class VenueDetails extends Component {
   }
 
   render() {
-    const { venueInfo, display } = this.props;
+    const { venueInfo, display, onClose } = this.props;
 
     if (display) {
       return (
         <div
           className={
-            "absolute absolute-fill w-100 w-40-l w-60-m  h-50 ml-auto mr-auto z-999 bg-white outline-0 br2"
+            "absolute absolute-fill w-100 w-40-l w-60-m h-75 h-50-l h-50-m ml-auto mr-auto z-999 bg-white outline-0 br2 overflow-hidden"
           }
           style={{
             transform: "translate(-50%, -50%)",
@@ -48,7 +48,7 @@ class VenueDetails extends Component {
           onKeyDown={this.handleKeyDown}
           tabIndex={0}
         >
-          <VenueDetailsHeader venueInfo={venueInfo.venueInfo} />
+          <VenueDetailsHeader venueInfo={venueInfo.venueInfo} handleClose={onClose}/>
           <hr className="black br1"/>
           <VenueDetailsBody checkins={venueInfo.checkins} />
         </div>

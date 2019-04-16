@@ -25,12 +25,12 @@ class VenueDetailsBody extends Component {
               />
               <div className="ml2 flex flex-column" key={index}>
                 <span className="f4 b">{beer.beer_name}</span>
-                <span className="f5">
+                <span className="f6 f5-l">
                   Brewery: {brewery.brewery_name} ({brewery.country_name})
                 </span>
-                <span className="f5">Style: {beer.beer_style}</span>
-                <span className="f5">Rating: {checkin.rating_score}/5</span>
-                <span className="f5">
+                <span className="f6 f5-l">Style: {beer.beer_style}</span>
+                <span className="f6 f5-l">Rating: {checkin.rating_score}/5</span>
+                <span className="f6 f5-l">
                   Date: {this.formatDate(checkin.created_at)}
                 </span>
               </div>

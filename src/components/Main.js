@@ -60,10 +60,10 @@ class Main extends Component {
       <div className="flex flex-column">
         <div className="absolute z-1 w-100 flex">
           <div className="Main-search-bar pa3 tc">
-            <div className="f2 tc Main-search-bar-title">Beer Around the World!</div>
+            <div className="Main-search-bar-title tc f2-l f4">Beer Around the World!</div>
 
             {this.state.token === null && (
-              <a className="f6 link dim br2 ph3 pv2 mb2 dib white bg-black"
+              <a className="f7 link dim br2 ph3 pv2 mb2 dib white bg-black"
                 href={`https://untappd.com/oauth/authenticate/?client_id=${untappdId}&response_type=token&redirect_url=https://beer-around-the-world.herokuapp.com/`}
               >
                 Login
@@ -82,7 +82,7 @@ class Main extends Component {
                     }
                     onFocus={() => this.setState({ username: "" })}
                   />
-                  <button className="ml2 f6 link dim br2 ph3 pv2 mb2 dib white bn bg-black"
+                  <button className="ml2 f7-ns f6-l link dim br2 ph3 pv2 mb2 dib white bn bg-black"
                     onClick={this.handleClick}>
                     Find Beers!
                   </button>
@@ -100,7 +100,7 @@ class Main extends Component {
               </div>
             )}
             {this.state.checkinRequestError && (
-              <div className="center f7 dark-red mt1">
+              <div className="center f7 f6-l dark-red mt1">
                 (Error: Unable to get checkins)
             </div>
             )}
