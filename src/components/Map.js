@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
-import GoogleMapReact from "google-map-react";
+import GoogleMap from "google-map-react";
 import marker from "../images/marker.png";
 
 const googleMapsKey = process.env.REACT_APP_GOOGLE_MAPS_KEY;
@@ -20,35 +20,35 @@ class Map extends Component {
     center: { lat: -22.906847, lng: -43.172897 },
     zoom: 0
   };
-
+  
   render() {
     const { venues } = this.props;
+    const locations = Object.entries(venues).map(([id, data], index) => ({
+      lat: data.venueInfo.location.lat,
+      lng: data.venueInfo.location.lng,
+      venueId: data.venueInfo.venue_id
+    }));
 
     return (
       // Important! Always set the container height explicitly
       <div className="vh-100 w-100 center">
-        <GoogleMapReact
+        <GoogleMap
+          ref={map => (this.map = map)}
           bootstrapURLKeys={{ key: googleMapsKey }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >
           {venues &&
-            Object.entries(venues).map(([id, data], index) => {
-              const lat = data.venueInfo.location.lat;
-              const lng = data.venueInfo.location.lng;
-              const venueId = data.venueInfo.venue_id;
-
-              return (
-                <Marker
-                  key={index}
-                  lat={lat}
-                  lng={lng}
-                  venueId={venueId}
-                  onClick={this.props.onMarkerClick}
-                />
-              );
-            })}
-        </GoogleMapReact>
+            locations.map((location, index) => (
+              <Marker
+                key={index}
+                lat={location.lat}
+                lng={location.lng}
+                venueId={location.venueId}
+                onClick={this.props.onMarkerClick}
+              />
+            ))}
+        </GoogleMap>
       </div>
     );
   }
