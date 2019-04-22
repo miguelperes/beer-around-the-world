@@ -13,7 +13,7 @@ class VenueDetailsBody extends Component {
       <div className="ml1 mt1 overflow-y-scroll h-75">
         {checkins.map((checkin, index) => {
           const beer = checkin.beer;
-          const brewery = checkin.brewery
+          const brewery = checkin.brewery;
 
           return (
             <div className="flex flex-row mv2 ml2" key={index}>
@@ -25,14 +25,10 @@ class VenueDetailsBody extends Component {
               />
               <div className="ml2 flex flex-column" key={index}>
                 <span className="f4 b">{beer.beer_name}</span>
-                <span className="f6 f5-l">
-                  Brewery: {brewery.brewery_name} ({brewery.country_name})
-                </span>
+                <span className="f6 f5-l">Brewery: {brewery.brewery_name} ({brewery.country_name})</span>
                 <span className="f6 f5-l">Style: {beer.beer_style}</span>
-                <span className="f6 f5-l">Rating: {checkin.rating_score}/5</span>
-                <span className="f6 f5-l">
-                  Date: {this.formatDate(checkin.created_at)}
-                </span>
+                <span className="f6 f5-l">Rating: {checkin.rating_score === 0? "-": `${checkin.rating_score}/5`}</span>
+                <span className="f6 f5-l">Date: {this.formatDate(checkin.created_at)}</span>
               </div>
             </div>
           );
