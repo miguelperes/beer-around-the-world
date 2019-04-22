@@ -20,6 +20,16 @@ class Map extends Component {
     center: { lat: -22.906847, lng: -43.172897 },
     zoom: 0
   };
+
+  getLastLocationCoord = (locations) => {
+    const locationsLength = locations.length
+    if(locationsLength > 1){
+      const lastLocation = locations[locationsLength - 1]
+      return {lat: lastLocation.lat, lng: lastLocation.lng}
+    }
+
+    return this.props.defaultCenter
+  }
   
   render() {
     const { venues } = this.props;
@@ -36,6 +46,7 @@ class Map extends Component {
           ref={map => (this.map = map)}
           bootstrapURLKeys={{ key: googleMapsKey }}
           defaultCenter={this.props.center}
+          center={this.getLastLocationCoord(locations)}
           defaultZoom={this.props.zoom}
         >
           {venues &&
