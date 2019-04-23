@@ -37,16 +37,15 @@ class Main extends Component {
     const {username, token} = this.state
     this.setState({ loadingCheckins: true, checkinRequestError: false });
 
-    const { nextPageUrl, checkins } = await getCheckins(username, token);
+    const checkinsRequest = await getCheckins(username, token);
 
-    checkins
-      ? this.setState({
-        venuesInfo: organizeVenues(checkins),
-        loadingCheckins: false
-      })
-      : this.setState({ checkinRequestError: true, loadingCheckins: false });
-
+    if(checkinsRequest) {
+      const {checkins, nextPageUrl} = checkinsRequest
+      this.setState({venuesInfo: organizeVenues(checkins),loadingCheckins: false})
       this.getNextCheckins(3, nextPageUrl, token) // Get more 150 checkins
+    } else {
+      this.setState({ checkinRequestError: true, loadingCheckins: false })
+    }
   };
 
   selectVenue = venue =>
