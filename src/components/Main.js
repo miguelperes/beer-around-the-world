@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "../App.css";
 import Map from "./Map";
 import VenueDetails from "./VenueDetails";
+import Modal from "./Modal";
 
 import ReactLoading from "react-loading";
 import queryString from "query-string";
@@ -53,7 +54,7 @@ class Main extends Component {
 
   closeVenueDetails = () => this.setState({ showVenue: false });
 
-  // move to untappdAPI file?
+  // TODO: move to untappdAPI file?
   async getNextCheckins(pagesNumber, nextPageUrl, token) {
     let venues = this.state.venuesInfo
     let nextUrl = nextPageUrl
@@ -124,11 +125,15 @@ class Main extends Component {
           </div>
         </div>
 
-        <VenueDetails
-          display={showVenue}
+        <Modal display={showVenue}
           venueInfo={venuesInfo[selectedVenue]}
           onClose={this.closeVenueDetails}
-        />
+        >
+          <VenueDetails
+            venueInfo={venuesInfo[selectedVenue]}
+            onClose={this.closeVenueDetails}
+          />
+        </Modal>
 
         <div className="h-100 w-100">
           <Map venues={venuesInfo} onMarkerClick={this.selectVenue} />

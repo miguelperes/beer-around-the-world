@@ -15,7 +15,7 @@ const VenueDetailsHeader = ({ venueInfo, handleClose }) => {
           {location.venue_country}
         </span>
       </div>
-      <CloseButton handleClick={handleClose}/>
+      <CloseButton handleClick={handleClose} />
     </header>
   );
 };

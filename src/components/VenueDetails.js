@@ -4,65 +4,30 @@ import VenueDetailsHeader from "./VenueDetailsHeader";
 import VenueDetailsBody from "./VenueDetailsBody";
 
 class VenueDetails extends Component {
-  handleClick = event => {
-    if (this.props.display && !this.node.contains(event.target)) {
-      this.props.onClose();
-    }
-  };
-
-  handleKeyDown = event => {
-    if (event.key === "Escape") {
-      this.props.onClose();
-    }
-  };
-
-  componentWillMount() {
-    document.addEventListener("mousedown", this.handleClick);
-    document.addEventListener("touchstart", this.handleClick);
-  }
-
-  componentDidUpdate() {
-    this.node && this.node.focus();
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("mousedown", this.handleClick);
-    document.removeEventListener("touchstart", this.handleClick);
-  }
-
   render() {
-    const { venueInfo, display, onClose } = this.props;
+    const { venueInfo, onClose } = this.props;
 
-    if (display) {
-      return (
-        <div
-          className={
-            "absolute absolute-fill w-100 w-40-l w-60-m h-75 h-50-l h-50-m ml-auto mr-auto z-999 bg-white outline-0 br2 overflow-hidden"
-          }
-          style={{
-            transform: "translate(-50%, -50%)",
-            top: "50%",
-            left: "50%"
-          }}
-          ref={node => (this.node = node)}
-          onKeyDown={this.handleKeyDown}
-          tabIndex={0}
-        >
-          <VenueDetailsHeader venueInfo={venueInfo.venueInfo} handleClose={onClose}/>
-          <hr className="black br1"/>
-          <VenueDetailsBody checkins={venueInfo.checkins} />
-        </div>
-      );
-    }
-
-    return null;
+    return (
+      <div
+        className={"w-100 h-100 bg-white overflow-hidden"}
+        ref={node => (this.node = node)}
+        onKeyDown={this.handleKeyDown}
+        tabIndex={0}
+      >
+        <VenueDetailsHeader
+          venueInfo={venueInfo.venueInfo}
+          handleClose={onClose}
+        />
+        <hr className="black br1" />
+        <VenueDetailsBody checkins={venueInfo.checkins} />
+      </div>
+    );
   }
 }
 
 VenueDetails.propTypes = {
-  display: PropTypes.bool.isRequired,
   venueInfo: PropTypes.object,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func
 };
 
 export default VenueDetails;
