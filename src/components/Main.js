@@ -19,6 +19,7 @@ class Main extends Component {
     this.state = {
       token: null,
       username: "Untappd username",
+      userData: {},
       venuesInfo: [],
       selectedVenue: null,
       checkinRequestError: false,
@@ -34,17 +35,31 @@ class Main extends Component {
 
   handleClick = async event => {
     event.preventDefault();
-    const {username, token} = this.state
-    this.setState({ loadingCheckins: true, checkinRequestError: false });
+    const { username, token, userData } = this.state;
 
-    const checkinsRequest = await getCheckins(username, token);
-
-    if(checkinsRequest) {
-      const {checkins, nextPageUrl} = checkinsRequest
-      this.setState({venuesInfo: organizeVenues(checkins),loadingCheckins: false})
-      this.getNextCheckins(3, nextPageUrl, token) // Get more 150 checkins
+    if (userData[username]) {
+      this.setState({ venuesInfo: userData[username].venuesInfo });
     } else {
-      this.setState({ checkinRequestError: true, loadingCheckins: false })
+      this.setState({ loadingCheckins: true, checkinRequestError: false });
+
+      const checkinsRequest = await getCheckins(username, token);
+
+      if (checkinsRequest) {
+        const { checkins, nextPageUrl } = checkinsRequest;
+
+        const updatedUserData = { ...userData };
+        const organizedVenuesInfo = organizeVenues(checkins);
+        updatedUserData[username] = { venuesInfo: { ...organizedVenuesInfo } };
+
+        this.setState({
+          userData: updatedUserData,
+          venuesInfo: organizedVenuesInfo,
+          loadingCheckins: false
+        });
+        this.getNextCheckins(3, nextPageUrl, token); // Get more 150 checkins
+      } else {
+        this.setState({ checkinRequestError: true, loadingCheckins: false });
+      }
     }
   };
 
@@ -55,19 +70,27 @@ class Main extends Component {
 
   // TODO: move to untappdAPI file?
   async getNextCheckins(pagesNumber, nextPageUrl, token) {
-    let venues = this.state.venuesInfo
-    let nextUrl = nextPageUrl
-    
-    while(pagesNumber > 0 && nextUrl !== "") {
+    console.log("GET NEXT CHECKINS!");
+    let venues = this.state.venuesInfo;
+    let nextUrl = nextPageUrl;
+
+    while (pagesNumber > 0 && nextUrl !== "") {
       const pageResult = await getCheckins(this.state.username, token, nextUrl);
       const formattedResult = organizeVenues(pageResult.checkins);
-      nextUrl = pageResult.nextPageUrl
-      
-      venues = concatVenues(venues, formattedResult)    
-      this.setState({venuesInfo: venues})
+      nextUrl = pageResult.nextPageUrl;
 
-      pagesNumber--
+      venues = concatVenues(venues, formattedResult);
+      this.setState({ venuesInfo: venues });
+
+      pagesNumber--;
     }
+
+    this.setState((prevState, props) => {
+      const userData = { ...prevState.userData };
+      userData[this.state.username] = {venuesInfo: venues}
+      
+      return {userData: userData}
+    });
   }
 
   render() {
