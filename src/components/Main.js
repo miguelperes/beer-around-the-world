@@ -46,16 +46,10 @@ class Main extends Component {
 
       if (checkinsRequest) {
         const { checkins, nextPageUrl } = checkinsRequest;
+        this.setUserVenues(username, organizeVenues(checkins))
+        
+        this.setState({loadingCheckins: false});
 
-        const updatedUserData = { ...userData };
-        const organizedVenuesInfo = organizeVenues(checkins);
-        updatedUserData[username] = { venuesInfo: { ...organizedVenuesInfo } };
-
-        this.setState({
-          userData: updatedUserData,
-          venuesInfo: organizedVenuesInfo,
-          loadingCheckins: false
-        });
         this.getNextCheckins(3, nextPageUrl, token); // Get more 150 checkins
       } else {
         this.setState({ checkinRequestError: true, loadingCheckins: false });
@@ -68,9 +62,17 @@ class Main extends Component {
 
   closeVenueDetails = () => this.setState({ showVenue: false });
 
+  setUserVenues = (username, venues) => {
+    this.setState((prevState, props) => {
+      const userData = { ...prevState.userData };
+      userData[username] = {venuesInfo: venues}
+      
+      return {userData: userData, venuesInfo: venues}
+    });
+  }
+
   // TODO: move to untappdAPI file?
   async getNextCheckins(pagesNumber, nextPageUrl, token) {
-    console.log("GET NEXT CHECKINS!");
     let venues = this.state.venuesInfo;
     let nextUrl = nextPageUrl;
 
@@ -85,12 +87,7 @@ class Main extends Component {
       pagesNumber--;
     }
 
-    this.setState((prevState, props) => {
-      const userData = { ...prevState.userData };
-      userData[this.state.username] = {venuesInfo: venues}
-      
-      return {userData: userData}
-    });
+    this.setUserVenues(this.state.username, venues)
   }
 
   render() {
