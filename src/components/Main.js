@@ -6,11 +6,9 @@ import Modal from "./Modal";
 
 import queryString from "query-string";
 
-import { getCheckins } from "../utils/untappdAPI";
+import { getCheckins, AUTH_URL } from "../utils/untappdAPI";
 import { organizeVenues, concatVenues } from "../utils/utility";
 import SearchBar from "./SearchBar";
-
-const untappdId = process.env.REACT_APP_UNTAPPD_ID;
 
 class Main extends Component {
   constructor() {
@@ -108,7 +106,7 @@ class Main extends Component {
             {this.state.token === null && (
               <a
                 className="f7 link dim br2 ph3 pv2 mb2 dib white bg-black"
-                href={`https://untappd.com/oauth/authenticate/?client_id=${untappdId}&response_type=token&redirect_url=https://beer-around-the-world.herokuapp.com/`}
+                href={AUTH_URL}
               >
                 Login
               </a>
