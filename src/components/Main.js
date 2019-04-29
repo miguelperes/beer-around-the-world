@@ -44,7 +44,7 @@ class Main extends Component {
       if (checkinsRequest) {
         const { checkins, nextPageUrl } = checkinsRequest;
         this.setUserVenues(username, organizeVenues(checkins));
-        this.getNextCheckins(3, nextPageUrl, token); // Get more 150 checkins
+        this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
 
       } else {
         this.setState({ checkinRequestError: true, loadingCheckins: false });
@@ -73,6 +73,9 @@ class Main extends Component {
 
     while (pagesNumber > 0 && nextUrl !== "") {
       const pageResult = await getCheckins(this.state.username, token, nextUrl);
+      
+      if(!pageResult) break // If searchinng another user, shows only up to 300 checkins
+
       const formattedResult = organizeVenues(pageResult.checkins);
       nextUrl = pageResult.nextPageUrl;
 
