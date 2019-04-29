@@ -9,6 +9,7 @@ import queryString from "query-string";
 import { getCheckins, AUTH_URL } from "../utils/untappdAPI";
 import { organizeVenues, concatVenues } from "../utils/utility";
 import SearchBar from "./SearchBar";
+import SideMenu from "./SideMenu";
 
 class Main extends Component {
   constructor() {
@@ -128,6 +129,8 @@ class Main extends Component {
             )}
           </div>
         </div>
+
+        <SideMenu />
 
         <Modal
           display={showVenue}
