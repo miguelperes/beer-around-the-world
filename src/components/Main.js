@@ -4,13 +4,11 @@ import Map from "./Map";
 import VenueDetails from "./VenueDetails";
 import Modal from "./Modal";
 
-import ReactLoading from "react-loading";
 import queryString from "query-string";
 
-import { getCheckins } from "../utils/untappdAPI";
+import { getCheckins, AUTH_URL } from "../utils/untappdAPI";
 import { organizeVenues, concatVenues } from "../utils/utility";
-
-const untappdId = process.env.REACT_APP_UNTAPPD_ID;
+import SearchBar from "./SearchBar";
 
 class Main extends Component {
   constructor() {
@@ -33,9 +31,8 @@ class Main extends Component {
     if (access_token) this.setState({ token: access_token });
   }
 
-  handleClick = async event => {
-    event.preventDefault();
-    const { username, token, userData } = this.state;
+  handleSubmit = async username => {
+    const { token, userData } = this.state;
 
     if (userData[username]) {
       this.setState({ venuesInfo: userData[username].venuesInfo });
@@ -46,11 +43,9 @@ class Main extends Component {
 
       if (checkinsRequest) {
         const { checkins, nextPageUrl } = checkinsRequest;
-        this.setUserVenues(username, organizeVenues(checkins))
-        
-        this.setState({loadingCheckins: false});
-
+        this.setUserVenues(username, organizeVenues(checkins));
         this.getNextCheckins(3, nextPageUrl, token); // Get more 150 checkins
+
       } else {
         this.setState({ checkinRequestError: true, loadingCheckins: false });
       }
@@ -65,11 +60,11 @@ class Main extends Component {
   setUserVenues = (username, venues) => {
     this.setState((prevState, props) => {
       const userData = { ...prevState.userData };
-      userData[username] = {venuesInfo: venues}
-      
-      return {userData: userData, venuesInfo: venues}
+      userData[username] = { venuesInfo: venues };
+
+      return { userData: userData, venuesInfo: venues };
     });
-  }
+  };
 
   // TODO: move to untappdAPI file?
   async getNextCheckins(pagesNumber, nextPageUrl, token) {
@@ -87,11 +82,17 @@ class Main extends Component {
       pagesNumber--;
     }
 
-    this.setUserVenues(this.state.username, venues)
+    this.setUserVenues(this.state.username, venues);
+    this.setState({ loadingCheckins: false });
   }
 
   render() {
-    const { venuesInfo, showVenue, selectedVenue } = this.state;
+    const {
+      venuesInfo,
+      showVenue,
+      selectedVenue,
+      loadingCheckins
+    } = this.state;
 
     return (
       <div className="flex flex-column">
@@ -104,43 +105,19 @@ class Main extends Component {
             {this.state.token === null && (
               <a
                 className="f7 link dim br2 ph3 pv2 mb2 dib white bg-black"
-                href={`https://untappd.com/oauth/authenticate/?client_id=${untappdId}&response_type=token&redirect_url=https://beer-around-the-world.herokuapp.com/`}
+                href={AUTH_URL}
               >
                 Login
               </a>
             )}
 
             {this.state.token !== null && (
-              <div className="flex flex-row justify-center items-center center mt2">
-                <form className="center" onSubmit={this.handleClick}>
-                  <input
-                    type="text"
-                    className="ba b--black-20 pa1 mb1"
-                    value={this.state.username}
-                    onChange={event =>
-                      this.setState({ username: event.target.value })
-                    }
-                    onFocus={() => this.setState({ username: "" })}
-                  />
-                  <button
-                    className="ml2 f7-ns f6-l link dim br2 ph3 pv2 mb2 dib white bn bg-black"
-                    onClick={this.handleClick}
-                  >
-                    Find Beers!
-                  </button>
-                </form>
-
-                {this.state.loadingCheckins && (
-                  <ReactLoading
-                    className="ml2 self-start"
-                    type="spin"
-                    color="#ffff00"
-                    height={30}
-                    width={30}
-                  />
-                )}
-              </div>
+              <SearchBar
+                handleSubmit={this.handleSubmit}
+                isLoading={loadingCheckins}
+              />
             )}
+
             {this.state.checkinRequestError && (
               <div className="center f7 f6-l dark-red mt1">
                 (Error: Unable to get checkins)
