@@ -20,6 +20,13 @@ export function getCheckins(username, token, nextPageUrl = null) {
   );
 }
 
+export function getUserInfo(token) {
+  return axios.get(BASE_ENDPOINT + `/user/info?access_token=${token}`).then(
+    response => response.data.response.user,
+    error => error
+  )
+}
+
 function checkinEndpoint(username, token) {
   return `${BASE_ENDPOINT}/user/checkins/${username}?access_token=${token}&limit=${MAX_CHECKINS}`;
 }

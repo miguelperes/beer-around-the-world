@@ -2,17 +2,33 @@ import React from "react";
 import { slide as Menu } from "react-burger-menu";
 
 const SideMenu = props => {
+  const { userInfo } = props;
+  console.log(userInfo);
+
   return (
     <Menu styles={styles} {...props}>
-      <div className="f3 mb-4">
-        <img
-          src={"https://www.w3schools.com/w3images/avatar2.png"}
-          style={{ maxWidth: "100px", maxHeight: "100px" }}
-          alt="User Avatar"
-        />
-      </div>
+      {userInfo && (
+        <div className="flex flex-row mb5" style={{display: 'flex'}}>
+          <img
+            style={{ maxWidth: "100px", maxHeight: "100px" }}
+            src={userInfo.user_avatar}
+            alt="User Avatar"
+          />
+          <div className="ml2 flex flex-column">
+            <span className="f4 b mb1">{`${userInfo.first_name} ${userInfo.last_name}`}</span>
+            <span className="f6 f5-l">
+              Total Check-ins: {userInfo.stats.total_checkins}
+            </span>
+            <span className="f6 f5-l">Pinned Check-ins: 0</span>
+            <span className="f6 f5-l">Beers: {userInfo.stats.total_beers}</span>
+            <span className="f6 f5-l">Badges: {userInfo.stats.total_badges}</span>
+          </div>
+        </div>
+      )}
 
-      <a className="menu-item" href="/map">
+      <hr className="black br1" />
+
+      <a className="" href="/map">
         Map
       </a>
 

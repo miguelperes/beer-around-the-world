@@ -6,7 +6,7 @@ import Modal from "./Modal";
 
 import queryString from "query-string";
 
-import { getCheckins, AUTH_URL } from "../utils/untappdAPI";
+import { getUserInfo, getCheckins, AUTH_URL } from "../utils/untappdAPI";
 import { organizeVenues, concatVenues } from "../utils/utility";
 import SearchBar from "./SearchBar";
 import SideMenu from "./SideMenu";
@@ -18,6 +18,7 @@ class Main extends Component {
     this.state = {
       token: null,
       username: "Untappd username",
+      loggedUser: null,
       userData: {},
       venuesInfo: [],
       selectedVenue: null,
@@ -27,9 +28,12 @@ class Main extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { access_token } = queryString.parse(this.props.location.hash);
-    if (access_token) this.setState({ token: access_token });
+    if (access_token) {
+      const userInfo = await getUserInfo(access_token)
+      this.setState({ token: access_token, loggedUser: userInfo });
+    }
   }
 
   handleSubmit = async username => {
@@ -130,7 +134,7 @@ class Main extends Component {
           </div>
         </div>
 
-        <SideMenu />
+        <SideMenu userInfo={this.state.loggedUser} width={"30%"}/>
 
         <Modal
           display={showVenue}
