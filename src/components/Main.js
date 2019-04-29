@@ -44,10 +44,8 @@ class Main extends Component {
       if (checkinsRequest) {
         const { checkins, nextPageUrl } = checkinsRequest;
         this.setUserVenues(username, organizeVenues(checkins));
-
-        this.setState({ loadingCheckins: false });
-
         this.getNextCheckins(3, nextPageUrl, token); // Get more 150 checkins
+
       } else {
         this.setState({ checkinRequestError: true, loadingCheckins: false });
       }
@@ -85,6 +83,7 @@ class Main extends Component {
     }
 
     this.setUserVenues(this.state.username, venues);
+    this.setState({ loadingCheckins: false });
   }
 
   render() {
