@@ -17,7 +17,7 @@ const UserInformation = ({ userInfo }) => {
           <span className="f6 f5-l">
             Total Check-ins: {userInfo.stats.total_checkins}
           </span>
-          <span className="f6 f5-l">Pinned Check-ins: 0</span>
+          {/* <span className="f6 f5-l">Pinned Check-ins: 0</span> */}
           <span className="f6 f5-l">Beers: {userInfo.stats.total_beers}</span>
           <span className="f6 f5-l">Badges: {userInfo.stats.total_badges}</span>
         </div>
