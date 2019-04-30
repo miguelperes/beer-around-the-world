@@ -71,6 +71,14 @@ class Main extends Component {
     });
   };
 
+  logout = () => {
+    this.setState({
+      token: null,
+      loggedUser: null,
+      venuesInfo: []
+    })
+  }
+
   // TODO: move to untappdAPI file?
   async getNextCheckins(pagesNumber, nextPageUrl, token) {
     let venues = this.state.venuesInfo;
@@ -134,7 +142,7 @@ class Main extends Component {
           </div>
         </div>
 
-        <SideMenu userInfo={this.state.loggedUser} width={"30%"}/>
+        <SideMenu userInfo={this.state.loggedUser} onLogout={this.logout} width={"30%"}/>
 
         <Modal
           display={showVenue}

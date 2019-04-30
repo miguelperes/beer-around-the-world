@@ -1,30 +1,23 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import { slide as Menu } from "react-burger-menu";
+
 import UserInformation from "./UserInformation";
+import {AUTH_URL} from "../utils/untappdAPI";
 
 const SideMenu = props => {
-  const { userInfo } = props;
-  console.log(userInfo);
+  const { userInfo, onLogout } = props;
 
   return (
     <Menu styles={styles} {...props}>
-      {userInfo && (
-        <UserInformation userInfo={userInfo}/>
-      )}
+      {userInfo && <UserInformation userInfo={userInfo} />}
 
-      <hr className="black br1" />
-
-      <a className="" href="/map">
-        Map
-      </a>
-
-      <a className="menu-item" href="/about">
-        About
-      </a>
-
-      <a className="menu-item" href="/github">
-        GitHub
-      </a>
+      {
+        userInfo 
+        ? <a className="" href="/" onClick={onLogout}>Logout</a>
+        : <a className="" href={AUTH_URL}>Login</a>
+      }
     </Menu>
   );
 };
@@ -76,6 +69,11 @@ const styles = {
   bmOverlay: {
     background: "rgba(0, 0, 0, 0.3)"
   }
+};
+
+SideMenu.propTypes = {
+  userInfo: PropTypes.object,
+  onLogout: PropTypes.func
 };
 
 export default SideMenu;
