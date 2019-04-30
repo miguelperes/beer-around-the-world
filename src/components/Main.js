@@ -6,9 +6,16 @@ import Modal from "./Modal";
 
 import queryString from "query-string";
 
-import { getCheckins, AUTH_URL } from "../utils/untappdAPI";
-import { organizeVenues, concatVenues } from "../utils/utility";
+import { getUserInfo, getCheckins, AUTH_URL } from "../utils/untappdAPI";
+
+import {
+  organizeVenues,
+  concatVenues,
+  getSideMenuWidth
+} from "../utils/utility";
+
 import SearchBar from "./SearchBar";
+import SideMenu from "./SideMenu";
 
 class Main extends Component {
   constructor() {
@@ -17,6 +24,7 @@ class Main extends Component {
     this.state = {
       token: null,
       username: "Untappd username",
+      loggedUser: null,
       userData: {},
       venuesInfo: [],
       selectedVenue: null,
@@ -26,9 +34,12 @@ class Main extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { access_token } = queryString.parse(this.props.location.hash);
-    if (access_token) this.setState({ token: access_token });
+    if (access_token) {
+      const userInfo = await getUserInfo(access_token);
+      this.setState({ token: access_token, loggedUser: userInfo });
+    }
   }
 
   handleSubmit = async username => {
@@ -45,7 +56,6 @@ class Main extends Component {
         const { checkins, nextPageUrl } = checkinsRequest;
         this.setUserVenues(username, organizeVenues(checkins));
         this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
-
       } else {
         this.setState({ checkinRequestError: true, loadingCheckins: false });
       }
@@ -66,6 +76,14 @@ class Main extends Component {
     });
   };
 
+  logout = () => {
+    this.setState({
+      token: null,
+      loggedUser: null,
+      venuesInfo: []
+    });
+  };
+
   // TODO: move to untappdAPI file?
   async getNextCheckins(pagesNumber, nextPageUrl, token) {
     let venues = this.state.venuesInfo;
@@ -73,8 +91,8 @@ class Main extends Component {
 
     while (pagesNumber > 0 && nextUrl !== "") {
       const pageResult = await getCheckins(this.state.username, token, nextUrl);
-      
-      if(!pageResult) break // If searchinng another user, shows only up to 300 checkins
+
+      if (!pageResult) break; // If searchinng another user, shows only up to 300 checkins
 
       const formattedResult = organizeVenues(pageResult.checkins);
       nextUrl = pageResult.nextPageUrl;
@@ -96,6 +114,8 @@ class Main extends Component {
       selectedVenue,
       loadingCheckins
     } = this.state;
+
+    console.log(window.innerHeight);
 
     return (
       <div className="flex flex-column">
@@ -128,6 +148,12 @@ class Main extends Component {
             )}
           </div>
         </div>
+
+        <SideMenu
+          userInfo={this.state.loggedUser}
+          onLogout={this.logout}
+          width={getSideMenuWidth()}
+        />
 
         <Modal
           display={showVenue}

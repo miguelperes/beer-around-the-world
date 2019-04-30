@@ -6,6 +6,18 @@ export function concatVenues(venuesInformation, newInformation) {
   return Object.entries(newInformation).reduce(concatVenuesReducer, venuesInformation);
 }
 
+export function getSideMenuWidth() {
+  const innerWidth = window.innerWidth
+
+  const sizes = {phone: "90%", tablet: "55%", pc: "35%"}
+  
+  if(innerWidth <= 450) return sizes.phone
+  
+  if(innerWidth <= 960) return sizes.tablet
+
+  return sizes.pc
+}
+
 function checkinHasVenue(checkin) {
   return checkin.venue !== [] && checkin.venue.location;
 }
@@ -36,3 +48,4 @@ function concatVenuesReducer(acc, [venueId, content]) {
   acc[venueId] = content;
   return acc;
 }
+
