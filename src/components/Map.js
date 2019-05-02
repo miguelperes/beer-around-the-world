@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import GoogleMap from "google-map-react";
 import marker from "../images/marker.png";
 
@@ -32,12 +32,7 @@ class Map extends Component {
   }
   
   render() {
-    const { venues } = this.props;
-    const locations = Object.entries(venues).map(([id, data], index) => ({
-      lat: data.venueInfo.location.lat,
-      lng: data.venueInfo.location.lng,
-      venueId: data.venueInfo.venue_id
-    }));
+    const { pinLocations } = this.props;
 
     return (
       // Important! Always set the container height explicitly
@@ -46,16 +41,16 @@ class Map extends Component {
           ref={map => (this.map = map)}
           bootstrapURLKeys={{ key: googleMapsKey }}
           defaultCenter={this.props.center}
-          center={this.getLastLocationCoord(locations)}
+          center={this.getLastLocationCoord(pinLocations)}
           defaultZoom={this.props.zoom}
         >
-          {venues &&
-            locations.map((location, index) => (
+          {pinLocations &&
+            pinLocations.map((location, index) => (
               <Marker
                 key={index}
                 lat={location.lat}
                 lng={location.lng}
-                venueId={location.venueId}
+                venueId={location.id}
                 onClick={this.props.onMarkerClick}
               />
             ))}
@@ -65,7 +60,9 @@ class Map extends Component {
   }
 }
 
-// TODO
-// Map.propTypes = {};
+Map.propTypes = {
+  pinLocations: PropTypes.array,
+  onMarkerClick: PropTypes.func
+};
 
 export default Map;

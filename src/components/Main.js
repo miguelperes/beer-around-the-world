@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../App.css";
 import Map from "./Map";
-import VenueDetails from "./VenueDetails";
+import LocationDetails from "./LocationDetails";
 import Modal from "./Modal";
 
 import queryString from "query-string";
@@ -30,10 +30,11 @@ class Main extends Component {
       userData: {},
       venuesInfo: {},
       breweriesInfo: {},
-      selectedVenue: null,
+      selectedLocation: null,
+      pinByVenues: false,
       checkinRequestError: false,
       loadingCheckins: false,
-      showVenue: false
+      showLocationDetails: false
     };
   }
 
@@ -67,10 +68,10 @@ class Main extends Component {
     }
   };
 
-  selectVenue = venue =>
-    this.setState({ selectedVenue: venue, showVenue: true });
+  selectPin = location_id =>
+    this.setState({ selectedLocation: location_id, showLocationDetails: true });
 
-  closeVenueDetails = () => this.setState({ showVenue: false });
+  closeLocationDetails = () => this.setState({ showLocationDetails: false });
 
   setUserVenues = (username, venues) => {
     this.setState((prevState) => {
@@ -130,10 +131,19 @@ class Main extends Component {
   render() {
     const {
       venuesInfo,
-      showVenue,
-      selectedVenue,
+      breweriesInfo,
+      pinByVenues,
+      showLocationDetails,
+      selectedLocation,
       loadingCheckins
     } = this.state;
+
+    const locations = pinByVenues ? venuesInfo : breweriesInfo
+    const pinLocations = Object.entries(locations).map(([key, data]) => ({
+      lat: data.info.location.lat,
+      lng: data.info.location.lng,
+      id: key
+    }));
 
     return (
       <div className="flex flex-column">
@@ -174,18 +184,18 @@ class Main extends Component {
         />
 
         <Modal
-          display={showVenue}
-          venueInfo={venuesInfo[selectedVenue]}
-          onClose={this.closeVenueDetails}
+          display={showLocationDetails}
+          onClose={this.closeLocationDetails}
         >
-          <VenueDetails
-            venueInfo={venuesInfo[selectedVenue]}
-            onClose={this.closeVenueDetails}
+          <LocationDetails
+            locationInfo={locations[selectedLocation]}
+            pinByVenues={pinByVenues}
+            onClose={this.closeLocationDetails}
           />
         </Modal>
 
         <div className="h-100 w-100">
-          <Map venues={venuesInfo} onMarkerClick={this.selectVenue} />
+          <Map pinLocations={pinLocations} onMarkerClick={this.selectPin} />
         </div>
       </div>
     );

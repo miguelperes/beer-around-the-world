@@ -39,7 +39,7 @@ function groupByVenueReducer(venues, currentCheckin) {
   }
 
   venues[venueId] = {
-    venueInfo: { ...currentCheckin.venue },
+    info: { ...currentCheckin.venue },
     checkins: [currentCheckin]
   };
 
@@ -55,7 +55,7 @@ function groupByBreweryReducer(breweries, currentCheckin) {
     }
 
     breweries[breweryId] = {
-      breweryInfo: { ...currentCheckin.brewery },
+      info: { ...currentCheckin.brewery },
       checkins: [currentCheckin]
     }
 
