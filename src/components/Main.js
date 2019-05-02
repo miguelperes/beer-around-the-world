@@ -9,10 +9,12 @@ import queryString from "query-string";
 import { getUserInfo, getCheckins, AUTH_URL } from "../utils/untappdAPI";
 
 import {
+  organizeByBreweries,
   organizeVenues,
   concatVenues,
-  getSideMenuWidth
-} from "../utils/utility";
+  getSideMenuWidth,
+  concatBreweries
+} from "../utils/checkinsHandler";
 
 import SearchBar from "./SearchBar";
 import SideMenu from "./SideMenu";
@@ -26,7 +28,8 @@ class Main extends Component {
       username: "Untappd username",
       loggedUser: null,
       userData: {},
-      venuesInfo: [],
+      venuesInfo: {},
+      breweriesInfo: {},
       selectedVenue: null,
       checkinRequestError: false,
       loadingCheckins: false,
@@ -54,6 +57,8 @@ class Main extends Component {
 
       if (checkinsRequest) {
         const { checkins, nextPageUrl } = checkinsRequest;
+
+        this.setUserBreweries(username, organizeByBreweries(checkins))
         this.setUserVenues(username, organizeVenues(checkins));
         this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
       } else {
@@ -68,13 +73,22 @@ class Main extends Component {
   closeVenueDetails = () => this.setState({ showVenue: false });
 
   setUserVenues = (username, venues) => {
-    this.setState((prevState, props) => {
+    this.setState((prevState) => {
       const userData = { ...prevState.userData };
-      userData[username] = { venuesInfo: venues };
+      userData[username] = { ...userData[username], venuesInfo: venues };
 
       return { userData: userData, venuesInfo: venues };
     });
   };
+
+  setUserBreweries = (username, breweries) => {
+    this.setState((prevState) => {
+      const userData = { ...prevState.userData };
+      userData[username] = { ...userData[username], breweriesInfo: breweries };
+
+      return { userData: userData, breweriesInfo: breweries };
+    });
+  }
 
   logout = () => {
     this.setState({
@@ -87,23 +101,29 @@ class Main extends Component {
   // TODO: move to untappdAPI file?
   async getNextCheckins(pagesNumber, nextPageUrl, token) {
     let venues = this.state.venuesInfo;
+    let breweries = this.state.breweriesInfo;
     let nextUrl = nextPageUrl;
 
     while (pagesNumber > 0 && nextUrl !== "") {
       const pageResult = await getCheckins(this.state.username, token, nextUrl);
 
       if (!pageResult) break; // If searchinng another user, shows only up to 300 checkins
-
-      const formattedResult = organizeVenues(pageResult.checkins);
+      
       nextUrl = pageResult.nextPageUrl;
 
-      venues = concatVenues(venues, formattedResult);
+      const resultByVenues = organizeVenues(pageResult.checkins);
+      venues = concatVenues(venues, resultByVenues);
       this.setState({ venuesInfo: venues });
+
+      const resultByBreweries = organizeByBreweries(pageResult.checkins);
+      breweries = concatBreweries(breweries, resultByBreweries);
+      this.setState({ breweriesInfo: breweries });
 
       pagesNumber--;
     }
 
     this.setUserVenues(this.state.username, venues);
+    this.setUserBreweries(this.state.username, breweries);
     this.setState({ loadingCheckins: false });
   }
 

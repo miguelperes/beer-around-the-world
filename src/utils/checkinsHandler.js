@@ -1,9 +1,17 @@
 export function organizeVenues(checkins) {
-  return checkins.filter(checkinHasVenue).reduce(groupByVenue, {});
+  return checkins.filter(checkinHasVenue).reduce(groupByVenueReducer, {});
+}
+
+export function organizeByBreweries(checkins) {
+  return checkins.reduce(groupByBreweryReducer, {})
 }
 
 export function concatVenues(venuesInformation, newInformation) {
   return Object.entries(newInformation).reduce(concatVenuesReducer, venuesInformation);
+}
+
+export function concatBreweries(breweriesInformation, newInformation) {
+  return Object.entries(newInformation).reduce(concatBreweriesReducer, breweriesInformation);
 }
 
 export function getSideMenuWidth() {
@@ -22,7 +30,7 @@ function checkinHasVenue(checkin) {
   return checkin.venue !== [] && checkin.venue.location;
 }
 
-function groupByVenue(venues, currentCheckin) {
+function groupByVenueReducer(venues, currentCheckin) {
   const venueId = currentCheckin.venue.venue_id;
   if (venues.hasOwnProperty(venueId)) {
     const venue = venues[venueId];
@@ -38,6 +46,22 @@ function groupByVenue(venues, currentCheckin) {
   return venues;
 }
 
+function groupByBreweryReducer(breweries, currentCheckin) {
+    const breweryId = currentCheckin.brewery.brewery_id
+    if(breweries.hasOwnProperty(breweryId)) {
+      const brewery = breweries[breweryId]
+      brewery.checkins = brewery.checkins.concat(currentCheckin)
+      return breweries
+    }
+
+    breweries[breweryId] = {
+      breweryInfo: { ...currentCheckin.brewery },
+      checkins: [currentCheckin]
+    }
+
+    return breweries
+  }
+
 function concatVenuesReducer(acc, [venueId, content]) {
   if (acc.hasOwnProperty(venueId)) {
     const checkins = acc[venueId].checkins;
@@ -46,6 +70,17 @@ function concatVenuesReducer(acc, [venueId, content]) {
   }
 
   acc[venueId] = content;
+  return acc;
+}
+
+function concatBreweriesReducer(acc, [breweryId, content]) {
+  if (acc.hasOwnProperty(breweryId)) {
+    const checkins = acc[breweryId].checkins;
+    acc[breweryId].checkins = checkins.concat(content.checkins);
+    return acc;
+  }
+
+  acc[breweryId] = content;
   return acc;
 }
 
