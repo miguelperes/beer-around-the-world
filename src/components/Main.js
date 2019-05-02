@@ -115,8 +115,6 @@ class Main extends Component {
       loadingCheckins
     } = this.state;
 
-    console.log(window.innerHeight);
-
     return (
       <div className="flex flex-column">
         <div className="absolute z-1 w-100 flex">
