@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import CloseButton from "./CloseButton";
 
-const VenueDetailsHeader = ({ venueInfo, handleClose }) => {
-  const { venue_name, venue_icon, location } = venueInfo;
+const VenueDetailsHeader = ({ locationInfo, handleClose }) => {
+  const { venue_name, venue_icon, location } = locationInfo;
 
   return (
     <header className="flex justify-center items-center">
@@ -21,7 +21,7 @@ const VenueDetailsHeader = ({ venueInfo, handleClose }) => {
 };
 
 VenueDetailsHeader.propTypes = {
-  venueInfo: PropTypes.object.isRequired,
+  locationInfo: PropTypes.object.isRequired,
   handleClose: PropTypes.func
 };
 

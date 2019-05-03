@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-class VenueDetailsBody extends Component {
+class LocationDetailsBody extends Component {
   formatDate = dateString => {
     return new Date(dateString).toDateString();
   };
@@ -38,8 +38,8 @@ class VenueDetailsBody extends Component {
   }
 }
 
-VenueDetailsBody.protoTypes = {
+LocationDetailsBody.protoTypes = {
   checkins: PropTypes.array
 };
 
-export default VenueDetailsBody;
+export default LocationDetailsBody;

@@ -3,21 +3,36 @@ import PropTypes from "prop-types";
 
 import { slide as Menu } from "react-burger-menu";
 
+import { AUTH_URL } from "../utils/untappdAPI";
+
 import UserInformation from "./UserInformation";
-import {AUTH_URL} from "../utils/untappdAPI";
+import Toggle from "./Toggle";
 
 const SideMenu = props => {
-  const { userInfo, onLogout } = props;
+  const { userInfo, onLogout, onPinToggle, defaultPinMethod } = props;
 
   return (
     <Menu styles={styles} {...props}>
       {userInfo && <UserInformation userInfo={userInfo} />}
 
-      {
-        userInfo 
-        ? <a className="" href="/" onClick={onLogout}>Logout</a>
-        : <a className="" href={AUTH_URL}>Login</a>
-      }
+      {userInfo && (
+        <Toggle
+          leftStateName="Pin Breweries"
+          rightStateName="Pin Venues"
+          onToggle={onPinToggle}
+          defaultValue={defaultPinMethod}
+        />
+      )}
+
+      {userInfo ? (
+        <a className="" href="/" onClick={onLogout}>
+          Logout
+        </a>
+      ) : (
+        <a className="" href={AUTH_URL}>
+          Login
+        </a>
+      )}
     </Menu>
   );
 };
@@ -73,7 +88,9 @@ const styles = {
 
 SideMenu.propTypes = {
   userInfo: PropTypes.object,
-  onLogout: PropTypes.func
+  onLogout: PropTypes.func,
+  onPinToggle: PropTypes.func,
+  defaultPinMethod: PropTypes.bool
 };
 
 export default SideMenu;

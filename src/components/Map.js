@@ -1,15 +1,16 @@
 import React, { Component } from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import GoogleMap from "google-map-react";
 import marker from "../images/marker.png";
+import blueMarker from "../images/marker_blue.png";
 
 const googleMapsKey = process.env.REACT_APP_GOOGLE_MAPS_KEY;
 
 const markerOffset = { transform: "translate(-50%, -100%)" };
-const Marker = ({ onClick, venueId }) => (
+const Marker = ({ onClick, venueId, pinType }) => (
   <img
     style={markerOffset}
-    src={marker}
+    src={pinType ? marker : blueMarker}
     alt="Map Marker"
     onClick={() => onClick(venueId)}
   />
@@ -23,7 +24,7 @@ class Map extends Component {
 
   getLastLocationCoord = (locations) => {
     const locationsLength = locations.length
-    if(locationsLength > 1){
+    if(locationsLength >= 1){
       const lastLocation = locations[locationsLength - 1]
       return {lat: lastLocation.lat, lng: lastLocation.lng}
     }
@@ -32,12 +33,7 @@ class Map extends Component {
   }
   
   render() {
-    const { venues } = this.props;
-    const locations = Object.entries(venues).map(([id, data], index) => ({
-      lat: data.venueInfo.location.lat,
-      lng: data.venueInfo.location.lng,
-      venueId: data.venueInfo.venue_id
-    }));
+    const { pinLocations, pinType } = this.props;
 
     return (
       // Important! Always set the container height explicitly
@@ -46,16 +42,17 @@ class Map extends Component {
           ref={map => (this.map = map)}
           bootstrapURLKeys={{ key: googleMapsKey }}
           defaultCenter={this.props.center}
-          center={this.getLastLocationCoord(locations)}
+          center={this.getLastLocationCoord(pinLocations)}
           defaultZoom={this.props.zoom}
         >
-          {venues &&
-            locations.map((location, index) => (
+          {pinLocations &&
+            pinLocations.map((location, index) => (
               <Marker
                 key={index}
                 lat={location.lat}
                 lng={location.lng}
-                venueId={location.venueId}
+                venueId={location.id}
+                pinType={pinType}
                 onClick={this.props.onMarkerClick}
               />
             ))}
@@ -65,7 +62,10 @@ class Map extends Component {
   }
 }
 
-// TODO
-// Map.propTypes = {};
+Map.propTypes = {
+  pinLocations: PropTypes.array,
+  pinType: PropTypes.bool,
+  onMarkerClick: PropTypes.func
+};
 
 export default Map;

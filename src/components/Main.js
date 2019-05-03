@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../App.css";
 import Map from "./Map";
-import VenueDetails from "./VenueDetails";
+import LocationDetails from "./LocationDetails";
 import Modal from "./Modal";
 
 import queryString from "query-string";
@@ -9,10 +9,12 @@ import queryString from "query-string";
 import { getUserInfo, getCheckins, AUTH_URL } from "../utils/untappdAPI";
 
 import {
-  organizeVenues,
+  organizeByBreweries,
+  organizeByVenues,
   concatVenues,
-  getSideMenuWidth
-} from "../utils/utility";
+  getSideMenuWidth,
+  concatBreweries
+} from "../utils/checkinsHandler";
 
 import SearchBar from "./SearchBar";
 import SideMenu from "./SideMenu";
@@ -26,11 +28,13 @@ class Main extends Component {
       username: "Untappd username",
       loggedUser: null,
       userData: {},
-      venuesInfo: [],
-      selectedVenue: null,
+      venuesInfo: {},
+      breweriesInfo: {},
+      selectedLocation: null,
+      pinByVenues: true,
       checkinRequestError: false,
       loadingCheckins: false,
-      showVenue: false
+      showLocationDetails: false
     };
   }
 
@@ -54,27 +58,29 @@ class Main extends Component {
 
       if (checkinsRequest) {
         const { checkins, nextPageUrl } = checkinsRequest;
-        this.setUserVenues(username, organizeVenues(checkins));
+        console.log(checkins)
+        this.setUserData(username, organizeByVenues(checkins), organizeByBreweries(checkins))
         this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
+        
       } else {
         this.setState({ checkinRequestError: true, loadingCheckins: false });
       }
     }
   };
 
-  selectVenue = venue =>
-    this.setState({ selectedVenue: venue, showVenue: true });
+  selectPin = location_id =>
+    this.setState({ selectedLocation: location_id, showLocationDetails: true });
 
-  closeVenueDetails = () => this.setState({ showVenue: false });
+  closeLocationDetails = () => this.setState({ showLocationDetails: false });
 
-  setUserVenues = (username, venues) => {
-    this.setState((prevState, props) => {
+  setUserData = (username, venues, breweries) => {
+    this.setState((prevState) => {
       const userData = { ...prevState.userData };
-      userData[username] = { venuesInfo: venues };
+      userData[username] = { ...userData[username], breweriesInfo: breweries, venuesInfo: venues };
 
-      return { userData: userData, venuesInfo: venues };
-    });
-  };
+      return { userData: userData, breweriesInfo: breweries, venuesInfo: venues };
+    })
+  }
 
   logout = () => {
     this.setState({
@@ -87,35 +93,46 @@ class Main extends Component {
   // TODO: move to untappdAPI file?
   async getNextCheckins(pagesNumber, nextPageUrl, token) {
     let venues = this.state.venuesInfo;
+    let breweries = this.state.breweriesInfo;
     let nextUrl = nextPageUrl;
 
     while (pagesNumber > 0 && nextUrl !== "") {
       const pageResult = await getCheckins(this.state.username, token, nextUrl);
 
       if (!pageResult) break; // If searchinng another user, shows only up to 300 checkins
-
-      const formattedResult = organizeVenues(pageResult.checkins);
+      
       nextUrl = pageResult.nextPageUrl;
 
-      venues = concatVenues(venues, formattedResult);
-      this.setState({ venuesInfo: venues });
+      const resultByVenues = organizeByVenues(pageResult.checkins);
+      venues = concatVenues(venues, resultByVenues);
+      
+      const resultByBreweries = organizeByBreweries(pageResult.checkins);
+      breweries = concatBreweries(breweries, resultByBreweries);
+
+      this.setState({ venuesInfo: venues, breweriesInfo: breweries});
 
       pagesNumber--;
     }
-
-    this.setUserVenues(this.state.username, venues);
+    this.setUserData(this.state.username, venues, breweries)
     this.setState({ loadingCheckins: false });
   }
 
   render() {
     const {
       venuesInfo,
-      showVenue,
-      selectedVenue,
+      breweriesInfo,
+      pinByVenues,
+      showLocationDetails,
+      selectedLocation,
       loadingCheckins
     } = this.state;
 
-    console.log(window.innerHeight);
+    const locations = pinByVenues ? venuesInfo : breweriesInfo
+    const pinLocations = Object.entries(locations).map(([key, data]) => ({
+      lat: data.info.location.lat,
+      lng: data.info.location.lng,
+      id: key
+    }));
 
     return (
       <div className="flex flex-column">
@@ -153,21 +170,23 @@ class Main extends Component {
           userInfo={this.state.loggedUser}
           onLogout={this.logout}
           width={getSideMenuWidth()}
+          defaultPinMethod={this.state.pinByVenues}
+          onPinToggle={() => this.setState((prevState) => ({pinByVenues: !prevState.pinByVenues}))}
         />
 
         <Modal
-          display={showVenue}
-          venueInfo={venuesInfo[selectedVenue]}
-          onClose={this.closeVenueDetails}
+          display={showLocationDetails}
+          onClose={this.closeLocationDetails}
         >
-          <VenueDetails
-            venueInfo={venuesInfo[selectedVenue]}
-            onClose={this.closeVenueDetails}
+          <LocationDetails
+            locationInfo={locations[selectedLocation]}
+            pinByVenues={pinByVenues}
+            onClose={this.closeLocationDetails}
           />
         </Modal>
 
         <div className="h-100 w-100">
-          <Map venues={venuesInfo} onMarkerClick={this.selectVenue} />
+          <Map pinLocations={pinLocations} pinType={pinByVenues} onMarkerClick={this.selectPin} />
         </div>
       </div>
     );
