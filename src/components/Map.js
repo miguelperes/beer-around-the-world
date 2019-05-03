@@ -23,7 +23,7 @@ class Map extends Component {
 
   getLastLocationCoord = (locations) => {
     const locationsLength = locations.length
-    if(locationsLength > 1){
+    if(locationsLength >= 1){
       const lastLocation = locations[locationsLength - 1]
       return {lat: lastLocation.lat, lng: lastLocation.lng}
     }
