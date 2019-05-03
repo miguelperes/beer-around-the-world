@@ -1,4 +1,4 @@
-export function organizeVenues(checkins) {
+export function organizeByVenues(checkins) {
   return checkins.filter(checkinHasVenue).reduce(groupByVenueReducer, {});
 }
 

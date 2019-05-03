@@ -10,7 +10,7 @@ import { getUserInfo, getCheckins, AUTH_URL } from "../utils/untappdAPI";
 
 import {
   organizeByBreweries,
-  organizeVenues,
+  organizeByVenues,
   concatVenues,
   getSideMenuWidth,
   concatBreweries
@@ -58,7 +58,7 @@ class Main extends Component {
 
       if (checkinsRequest) {
         const { checkins, nextPageUrl } = checkinsRequest;
-        this.setUserData(username, organizeVenues(checkins), organizeByBreweries(checkins))
+        this.setUserData(username, organizeByVenues(checkins), organizeByBreweries(checkins))
         this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
         
       } else {
@@ -102,7 +102,7 @@ class Main extends Component {
       
       nextUrl = pageResult.nextPageUrl;
 
-      const resultByVenues = organizeVenues(pageResult.checkins);
+      const resultByVenues = organizeByVenues(pageResult.checkins);
       venues = concatVenues(venues, resultByVenues);
       
       const resultByBreweries = organizeByBreweries(pageResult.checkins);
