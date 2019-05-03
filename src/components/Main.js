@@ -31,7 +31,7 @@ class Main extends Component {
       venuesInfo: {},
       breweriesInfo: {},
       selectedLocation: null,
-      pinByVenues: false,
+      pinByVenues: true,
       checkinRequestError: false,
       loadingCheckins: false,
       showLocationDetails: false
@@ -169,6 +169,8 @@ class Main extends Component {
           userInfo={this.state.loggedUser}
           onLogout={this.logout}
           width={getSideMenuWidth()}
+          defaultPinMethod={this.state.pinByVenues}
+          onPinToggle={() => this.setState((prevState) => ({pinByVenues: !prevState.pinByVenues}))}
         />
 
         <Modal
