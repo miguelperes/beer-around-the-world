@@ -58,10 +58,9 @@ class Main extends Component {
 
       if (checkinsRequest) {
         const { checkins, nextPageUrl } = checkinsRequest;
-
-        this.setUserBreweries(username, organizeByBreweries(checkins))
-        this.setUserVenues(username, organizeVenues(checkins));
+        this.setUserData(username, organizeVenues(checkins), organizeByBreweries(checkins))
         this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
+        
       } else {
         this.setState({ checkinRequestError: true, loadingCheckins: false });
       }
@@ -73,22 +72,13 @@ class Main extends Component {
 
   closeLocationDetails = () => this.setState({ showLocationDetails: false });
 
-  setUserVenues = (username, venues) => {
+  setUserData = (username, venues, breweries) => {
     this.setState((prevState) => {
       const userData = { ...prevState.userData };
-      userData[username] = { ...userData[username], venuesInfo: venues };
+      userData[username] = { ...userData[username], breweriesInfo: breweries, venuesInfo: venues };
 
-      return { userData: userData, venuesInfo: venues };
-    });
-  };
-
-  setUserBreweries = (username, breweries) => {
-    this.setState((prevState) => {
-      const userData = { ...prevState.userData };
-      userData[username] = { ...userData[username], breweriesInfo: breweries };
-
-      return { userData: userData, breweriesInfo: breweries };
-    });
+      return { userData: userData, breweriesInfo: breweries, venuesInfo: venues };
+    })
   }
 
   logout = () => {
@@ -114,17 +104,15 @@ class Main extends Component {
 
       const resultByVenues = organizeVenues(pageResult.checkins);
       venues = concatVenues(venues, resultByVenues);
-      this.setState({ venuesInfo: venues });
-
+      
       const resultByBreweries = organizeByBreweries(pageResult.checkins);
       breweries = concatBreweries(breweries, resultByBreweries);
-      this.setState({ breweriesInfo: breweries });
+
+      this.setState({ venuesInfo: venues, breweriesInfo: breweries});
 
       pagesNumber--;
     }
-
-    this.setUserVenues(this.state.username, venues);
-    this.setUserBreweries(this.state.username, breweries);
+    this.setUserData(this.state.username, venues, breweries)
     this.setState({ loadingCheckins: false });
   }
 
