@@ -185,7 +185,7 @@ class Main extends Component {
         </Modal>
 
         <div className="h-100 w-100">
-          <Map pinLocations={pinLocations} onMarkerClick={this.selectPin} />
+          <Map pinLocations={pinLocations} pinType={pinByVenues} onMarkerClick={this.selectPin} />
         </div>
       </div>
     );

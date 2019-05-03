@@ -2,14 +2,15 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import GoogleMap from "google-map-react";
 import marker from "../images/marker.png";
+import blueMarker from "../images/marker_blue.png";
 
 const googleMapsKey = process.env.REACT_APP_GOOGLE_MAPS_KEY;
 
 const markerOffset = { transform: "translate(-50%, -100%)" };
-const Marker = ({ onClick, venueId }) => (
+const Marker = ({ onClick, venueId, pinType }) => (
   <img
     style={markerOffset}
-    src={marker}
+    src={pinType ? marker : blueMarker}
     alt="Map Marker"
     onClick={() => onClick(venueId)}
   />
@@ -32,7 +33,7 @@ class Map extends Component {
   }
   
   render() {
-    const { pinLocations } = this.props;
+    const { pinLocations, pinType } = this.props;
 
     return (
       // Important! Always set the container height explicitly
@@ -51,6 +52,7 @@ class Map extends Component {
                 lat={location.lat}
                 lng={location.lng}
                 venueId={location.id}
+                pinType={pinType}
                 onClick={this.props.onMarkerClick}
               />
             ))}
@@ -62,6 +64,7 @@ class Map extends Component {
 
 Map.propTypes = {
   pinLocations: PropTypes.array,
+  pinType: PropTypes.bool,
   onMarkerClick: PropTypes.func
 };
 
