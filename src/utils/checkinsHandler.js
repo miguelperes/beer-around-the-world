@@ -3,7 +3,7 @@ export function organizeByVenues(checkins) {
 }
 
 export function organizeByBreweries(checkins) {
-  return checkins.reduce(groupByBreweryReducer, {})
+  return checkins.filter(breweryHasCorrectLocation).reduce(groupByBreweryReducer, {})
 }
 
 export function concatVenues(venuesInformation, newInformation) {
@@ -28,6 +28,11 @@ export function getSideMenuWidth() {
 
 function checkinHasVenue(checkin) {
   return checkin.venue !== [] && checkin.venue.location;
+}
+
+function breweryHasCorrectLocation(checkin) {
+  const hasLocation = checkin.brewery.location.lat !== 0 || checkin.brewery.location.lng !== 0
+  return checkin.brewery && hasLocation
 }
 
 function groupByVenueReducer(venues, currentCheckin) {

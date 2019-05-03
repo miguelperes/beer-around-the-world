@@ -58,6 +58,7 @@ class Main extends Component {
 
       if (checkinsRequest) {
         const { checkins, nextPageUrl } = checkinsRequest;
+        console.log(checkins)
         this.setUserData(username, organizeByVenues(checkins), organizeByBreweries(checkins))
         this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
         
