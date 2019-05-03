@@ -17,7 +17,7 @@ const SideMenu = props => {
 
       {userInfo && (
         <Toggle
-          leftStateName="Breweries"
+          leftStateName="Pin Breweries"
           rightStateName="Pin Venues"
           onToggle={onPinToggle}
           defaultValue={defaultPinMethod}
