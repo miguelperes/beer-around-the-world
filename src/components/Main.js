@@ -83,6 +83,7 @@ class Main extends Component {
   }
 
   logout = () => {
+    this.props.history.push("/")
     this.setState({
       token: null,
       loggedUser: null,
