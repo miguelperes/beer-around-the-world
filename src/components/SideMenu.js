@@ -25,9 +25,9 @@ const SideMenu = props => {
       )}
 
       {userInfo ? (
-        <a className="" href="/" onClick={onLogout}>
-          Logout
-        </a>
+        <button className="mt3 br2" onClick={onLogout}>
+          <span className="black">Logout</span>
+        </button>
       ) : (
         <a className="" href={AUTH_URL}>
           Login
