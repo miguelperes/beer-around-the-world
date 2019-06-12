@@ -33,6 +33,25 @@ const SideMenu = props => {
           Login
         </a>
       )}
+
+      <div
+        className="absolute bottom-0"
+        style={{
+          color: "#b8b7ad",
+          "&:hover": {
+            color: "#b8b7ad"
+          }
+        }}
+      >
+        created by{" "}
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="http://www.twitter.com/miguelfox"
+        >
+          @miguelfox
+        </a>
+      </div>
     </Menu>
   );
 };
