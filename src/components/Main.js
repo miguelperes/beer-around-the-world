@@ -42,6 +42,7 @@ class Main extends Component {
     const { access_token } = queryString.parse(this.props.location.hash);
     if (access_token) {
       const userInfo = await getUserInfo(access_token);
+      console.log('receive userinfo', userInfo)
       this.setState({ token: access_token, loggedUser: {...userInfo, totalCheckins: 0} });
       
       const userName = userInfo.user_name

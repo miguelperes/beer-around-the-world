@@ -22,8 +22,19 @@ export function getCheckins(username, token, nextPageUrl = null) {
 
 export function getUserInfo(token) {
   return axios.get(BASE_ENDPOINT + `/user/info?access_token=${token}`).then(
-    response => response.data.response.user,
-    error => error
+    response => {
+      console.log("RESPONSE", response.status)      
+      return response.data.response.user
+    },
+    error => {
+      if(error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      }
+      console.log(error)
+      return {error: error}
+    }
   )
 }
 

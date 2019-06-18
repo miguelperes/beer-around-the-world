@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const UserInformation = ({ userInfo }) => {
+  console.log(userInfo)
   return (
     <div>
       <div className="flex flex-row mb1" style={{ display: "flex" }}>
