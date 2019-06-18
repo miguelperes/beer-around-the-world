@@ -42,11 +42,14 @@ class Main extends Component {
     const { access_token } = queryString.parse(this.props.location.hash);
     if (access_token) {
       const userInfo = await getUserInfo(access_token);
-      this.setState({ token: access_token, loggedUser: userInfo });
+      this.setState({ token: access_token, loggedUser: {...userInfo, totalCheckins: 0} });
+      
+      const userName = userInfo.user_name
+      this.loadUserPins(userName)
     }
   }
 
-  handleSubmit = async username => {
+  loadUserPins = async username => {
     const { token, userData } = this.state;
 
     if (userData[username]) {
@@ -58,9 +61,16 @@ class Main extends Component {
 
       if (checkinsRequest) {
         const { checkins, nextPageUrl } = checkinsRequest;
-        console.log(checkins)
         this.setUserData(username, organizeByVenues(checkins), organizeByBreweries(checkins))
-        this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
+        await this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
+
+        this.setState(prevState => ({
+          loggedUser: {
+            ...prevState.loggedUser,
+            totalCheckins: prevState.loggedUser.totalCheckins + checkins.length
+          }
+        }));
+              
         
       } else {
         this.setState({ checkinRequestError: true, loadingCheckins: false });
@@ -110,7 +120,14 @@ class Main extends Component {
       const resultByBreweries = organizeByBreweries(pageResult.checkins);
       breweries = concatBreweries(breweries, resultByBreweries);
 
-      this.setState({ venuesInfo: venues, breweriesInfo: breweries});
+      this.setState((prevState) => ({
+        venuesInfo: venues,
+        breweriesInfo: breweries,
+        loggedUser: {
+          ...prevState.loggedUser,
+          totalCheckins: prevState.loggedUser.totalCheckins + pageResult.checkins.length
+        }
+      }));
 
       pagesNumber--;
     }
@@ -154,7 +171,7 @@ class Main extends Component {
 
             {this.state.token !== null && (
               <SearchBar
-                handleSubmit={this.handleSubmit}
+                handleSubmit={this.loadUserPins}
                 isLoading={loadingCheckins}
               />
             )}
