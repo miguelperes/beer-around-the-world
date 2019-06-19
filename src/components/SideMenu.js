@@ -14,35 +14,33 @@ const SideMenu = props => {
 
   return (
     <Menu styles={styles} {...props}>
-      {userInfo && <UserInformation userInfo={userInfo} />}
-
       {userInfo && (
-        <div>
+        <React.Fragment>
+          <UserInformation userInfo={userInfo} />
+
           <Toggle
             leftStateName="Pin Breweries"
             rightStateName="Pin Venues"
             onToggle={onPinToggle}
             defaultValue={defaultPinMethod}
           />
-        </div>
+
+          <div className="mt3">
+            <p className="mb1">Search another user:</p>
+            <SearchBar handleSubmit={onSubmitSearch} isLoading={isLoading} />
+          </div>
+
+          <button className="mt3 br2" onClick={onLogout}>
+            <span className="black">Logout</span>
+          </button>
+        </React.Fragment>
       )}
 
-      {userInfo && (
-        <div className="mt3">
-          <p className="mb1">Search another user:</p>
-          <SearchBar handleSubmit={onSubmitSearch} isLoading={isLoading} />
-        </div>
-      )}
-
-      {userInfo ? (
-        <button className="mt3 br2" onClick={onLogout}>
-          <span className="black">Logout</span>
-        </button>
-      ) : (
+      {!userInfo && 
         <a className="" href={AUTH_URL}>
           Login
         </a>
-      )}
+      }
 
       <div
         className="absolute bottom-0"
