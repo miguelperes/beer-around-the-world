@@ -29,7 +29,7 @@ class SearchBar extends Component {
         <form onSubmit={this.onSubmit}>
           <input
             type="text"
-            className="ba b--black-20 pa1 mb1"
+            className="ba b--black-20 pa1 mb1 w-50"
             value={this.state.username}
             onChange={this.onChange}
             onFocus={this.onFocus}
