@@ -176,13 +176,6 @@ class Main extends Component {
               </a>
             )}
 
-            {this.state.token !== null && (
-              <SearchBar
-                handleSubmit={this.loadUserPins}
-                isLoading={loadingCheckins}
-              />
-            )}
-
             {this.state.checkinRequestError && (
               <div className="center f7 f6-l dark-red mt1">
                 (Error: Unable to get checkins)
@@ -194,6 +187,8 @@ class Main extends Component {
         <SideMenu
           userInfo={this.state.loggedUser}
           onLogout={this.logout}
+          onSubmitSearch={this.loadUserPins}
+          isLoading={loadingCheckins}
           width={getSideMenuWidth()}
           defaultPinMethod={this.state.pinByVenues}
           onPinToggle={() => this.setState((prevState) => ({pinByVenues: !prevState.pinByVenues}))}

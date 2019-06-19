@@ -22,11 +22,11 @@ class SearchBar extends Component {
   }
 
   render() {
-    const { isLoading } = this.props
+    const { isLoading, style, buttonStyle } = this.props
 
     return (
-      <div className="flex flex-row justify-center items-center center mt2">
-        <form className="center" onSubmit={this.onSubmit}>
+      <div className={`flex flex-row justify-start ${style}`}>
+        <form onSubmit={this.onSubmit}>
           <input
             type="text"
             className="ba b--black-20 pa1 mb1"
@@ -35,7 +35,7 @@ class SearchBar extends Component {
             onFocus={this.onFocus}
           />
           <button
-            className="ml2 f7-ns f6-l link dim br2 ph3 pv2 mb2 dib white bn bg-black"
+            className={`ml2 f7-ns f6-l link dim br2 ph3 pv2 mb2 dib white bn bg-black ${buttonStyle}`}
             onClick={this.onSubmit}
           >
             Find Beers!

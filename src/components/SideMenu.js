@@ -6,22 +6,32 @@ import { slide as Menu } from "react-burger-menu";
 import { AUTH_URL } from "../utils/untappdAPI";
 
 import UserInformation from "./UserInformation";
+import SearchBar from "./SearchBar";
 import Toggle from "./Toggle";
 
 const SideMenu = props => {
-  const { userInfo, onLogout, onPinToggle, defaultPinMethod } = props;
+  const { userInfo, onLogout, onPinToggle, defaultPinMethod, onSubmitSearch, isLoading } = props;
 
   return (
     <Menu styles={styles} {...props}>
       {userInfo && <UserInformation userInfo={userInfo} />}
 
       {userInfo && (
-        <Toggle
-          leftStateName="Pin Breweries"
-          rightStateName="Pin Venues"
-          onToggle={onPinToggle}
-          defaultValue={defaultPinMethod}
-        />
+        <div>
+          <Toggle
+            leftStateName="Pin Breweries"
+            rightStateName="Pin Venues"
+            onToggle={onPinToggle}
+            defaultValue={defaultPinMethod}
+          />
+        </div>
+      )}
+
+      {userInfo && (
+        <div className="mt3">
+          <p className="mb1">Search another user:</p>
+          <SearchBar handleSubmit={onSubmitSearch} isLoading={isLoading} />
+        </div>
       )}
 
       {userInfo ? (
@@ -109,7 +119,9 @@ SideMenu.propTypes = {
   userInfo: PropTypes.object,
   onLogout: PropTypes.func,
   onPinToggle: PropTypes.func,
-  defaultPinMethod: PropTypes.bool
+  defaultPinMethod: PropTypes.bool,
+  onSubmitSearch: PropTypes.func,
+  isLoading: PropTypes.bool
 };
 
 export default SideMenu;

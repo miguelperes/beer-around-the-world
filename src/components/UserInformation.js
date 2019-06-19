@@ -13,7 +13,7 @@ const UserInformation = ({ userInfo }) => {
         <div className="ml2 flex flex-column">
           <span className="f4 b mb1">{`${userInfo.first_name} ${
             userInfo.last_name
-          }`}</span>
+          } (${userInfo.user_name})`}</span>
           <span className="f6 f5-l">
             Total Check-ins: {userInfo.stats.total_checkins}
           </span>
