@@ -59,15 +59,20 @@ class Main extends Component {
 
       const checkinsRequest = await getCheckins(username, token);
 
+      const selfRequest = username === this.state.loggedUser.user_name
+
       if (checkinsRequest) {
         const { checkins, nextPageUrl } = checkinsRequest;
         this.setUserData(username, organizeByVenues(checkins), organizeByBreweries(checkins))
-        await this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
-
+        await this.getNextCheckins(19, nextPageUrl, token, selfRequest); // Get more 950 checkins
+        
         this.setState(prevState => ({
           loggedUser: {
             ...prevState.loggedUser,
-            totalCheckins: prevState.loggedUser.totalCheckins + checkins.length
+            totalCheckins:
+              selfRequest
+                ? prevState.loggedUser.totalCheckins + checkins.length
+                : prevState.loggedUser.totalCheckins
           }
         }));
               
@@ -102,7 +107,7 @@ class Main extends Component {
   };
 
   // TODO: move to untappdAPI file?
-  async getNextCheckins(pagesNumber, nextPageUrl, token) {
+  async getNextCheckins(pagesNumber, nextPageUrl, token, selfRequest) {
     let venues = this.state.venuesInfo;
     let breweries = this.state.breweriesInfo;
     let nextUrl = nextPageUrl;
@@ -120,12 +125,14 @@ class Main extends Component {
       const resultByBreweries = organizeByBreweries(pageResult.checkins);
       breweries = concatBreweries(breweries, resultByBreweries);
 
-      this.setState((prevState) => ({
+      this.setState(prevState => ({
         venuesInfo: venues,
         breweriesInfo: breweries,
         loggedUser: {
           ...prevState.loggedUser,
-          totalCheckins: prevState.loggedUser.totalCheckins + pageResult.checkins.length
+          totalCheckins: selfRequest
+            ? prevState.loggedUser.totalCheckins + pageResult.checkins.length
+            : prevState.loggedUser.totalCheckins
         }
       }));
 
