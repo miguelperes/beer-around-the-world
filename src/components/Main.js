@@ -78,7 +78,7 @@ class Main extends Component {
     }
   };
 
-  selectPin = location_id =>
+  selectPin = location_id => 
     this.setState({ selectedLocation: location_id, showLocationDetails: true });
 
   closeLocationDetails = () => this.setState({ showLocationDetails: false });

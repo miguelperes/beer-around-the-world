@@ -35,8 +35,8 @@ class PigeonMap extends Component {
 
   render() {
     const { pinLocations, pinType } = this.props;
-    // const hue = 0
-    // const color = `hsl(${hue % 360}deg 39% 70%)`
+    const venueColor = `rgb(0 0 0)`
+    const brewerieColor = `rgb(230,230,250)`
 
     return (
       <div className="vh-100 w-100 center">
@@ -46,9 +46,10 @@ class PigeonMap extends Component {
               <Marker
                 key={index}
                 anchor={[location.lat, location.lng]}
-                // venueId={location.id}
-                // pinType={pinType}
-                // onClick={this.props.onMarkerClick}
+                venueId={location.id}
+                color={venueColor} // choose color based on venueType
+                pinType={pinType}
+                onClick={() => this.props.onMarkerClick(location.id)}
               />
         ))}
           {/* <Marker
