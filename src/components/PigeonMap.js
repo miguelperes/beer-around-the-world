@@ -1,21 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-// import GoogleMap from "google-map-react";
-// import marker from "../images/marker.png";
-import blueMarker from "../images/marker_blue.png";
 import { Map, Marker } from "pigeon-maps"
-
-// const googleMapsKey = process.env.REACT_APP_GOOGLE_MAPS_KEY;
-
-// const markerOffset = { transform: "translate(-50%, -100%)" };
-// const Marker = ({ onClick, venueId, pinType }) => (
-//   <img
-//     style={markerOffset}
-//     src={pinType ? marker : blueMarker}
-//     alt="Map Marker"
-//     onClick={() => onClick(venueId)}
-//   />
-// );
 
 class PigeonMap extends Component {
   static defaultProps = {
@@ -34,9 +19,9 @@ class PigeonMap extends Component {
   }
 
   render() {
-    const { pinLocations, pinType } = this.props;
+    const { pinLocations, pinByVenues } = this.props;
     const venueColor = `rgb(0 0 0)`
-    const brewerieColor = `rgb(230,230,250)`
+    const brewerieColor = `rgb(239,194,12)`
 
     return (
       <div className="vh-100 w-100 center">
@@ -47,37 +32,11 @@ class PigeonMap extends Component {
                 key={index}
                 anchor={[location.lat, location.lng]}
                 venueId={location.id}
-                color={venueColor} // choose color based on venueType
-                pinType={pinType}
+                color={pinByVenues ? venueColor : brewerieColor}
                 onClick={() => this.props.onMarkerClick(location.id)}
               />
         ))}
-          {/* <Marker
-            width={50}
-            anchor={[50.879, 4.6997]}
-            // color={color}
-            onClick={() => console.log("click")}
-          /> */}
         </Map>
-        {/* <GoogleMap
-          ref={map => (this.map = map)}
-          bootstrapURLKeys={{ key: googleMapsKey }}
-          defaultCenter={this.props.center}
-          center={this.getLastLocationCoord(pinLocations)}
-          defaultZoom={this.props.zoom}
-        >
-          {pinLocations &&
-            pinLocations.map((location, index) => (
-              <Marker
-                key={index}
-                lat={location.lat}
-                lng={location.lng}
-                venueId={location.id}
-                pinType={pinType}
-                onClick={this.props.onMarkerClick}
-              />
-            ))}
-        </GoogleMap> */}
       </div>
     );
   }
@@ -85,7 +44,7 @@ class PigeonMap extends Component {
 
 PigeonMap.propTypes = {
   pinLocations: PropTypes.array,
-  pinType: PropTypes.bool,
+  pinByVenues: PropTypes.bool,
   onMarkerClick: PropTypes.func
 };
 
