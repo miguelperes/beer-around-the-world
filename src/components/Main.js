@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../App.css";
-import Map from "./Map";
+import Map from "./PigeonMap";
 import LocationDetails from "./LocationDetails";
 import Modal from "./Modal";
 
