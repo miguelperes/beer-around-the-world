@@ -51,10 +51,16 @@ class Main extends Component {
 
   loadUserPins = async username => {
     const { token, userData } = this.state;
+    const cachedCheckins = JSON.parse(localStorage.getItem(username))
 
-    if (userData[username]) {
+    if (cachedCheckins) {
+      console.log("Using cached")
+      this.setState({venuesInfo: cachedCheckins.venuesInfo, breweriesInfo: cachedCheckins.breweriesInfo});
+    } 
+    else if (userData[username]) {
       this.setState({ venuesInfo: userData[username].venuesInfo });
-    } else {
+    }
+    else {
       this.setState({ loadingCheckins: true, checkinRequestError: false });
 
       const checkinsRequest = await getCheckins(username, token);
@@ -63,6 +69,7 @@ class Main extends Component {
         const { checkins, nextPageUrl } = checkinsRequest;
         this.setUserData(username, organizeByVenues(checkins), organizeByBreweries(checkins))
         await this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
+        localStorage.setItem(username, JSON.stringify(this.state.userData[username]))
 
         this.setState(prevState => ({
           loggedUser: {
