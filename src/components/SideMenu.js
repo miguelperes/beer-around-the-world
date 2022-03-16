@@ -48,8 +48,17 @@ const SideMenu = props => {
           target="_blank"
           rel="noopener noreferrer"
           href="http://www.twitter.com/miguelfox"
+          style={{color: "inherit"}}
         >
           @miguelfox
+        </a>&nbsp;/&nbsp;  
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="http://www.twitter.com/peresdev"
+          style={{color: "inherit"}}
+        >
+          @peresdev
         </a>
       </div>
     </Menu>
