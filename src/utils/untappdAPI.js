@@ -16,7 +16,9 @@ export function getCheckins(username, token, nextPageUrl = null) {
       nextPageUrl: response.data.response.pagination.next_url,
       checkins: response.data.response.checkins.items
     }),
-    error => null
+    error => {
+      console.error(error)
+    }
   );
 }
 

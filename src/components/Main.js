@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../App.css";
-import Map from "./Map";
+import Map from "./PigeonMap";
 import LocationDetails from "./LocationDetails";
 import Modal from "./Modal";
 
@@ -51,10 +51,16 @@ class Main extends Component {
 
   loadUserPins = async username => {
     const { token, userData } = this.state;
+    const cachedCheckins = JSON.parse(localStorage.getItem(username))
 
-    if (userData[username]) {
+    if (cachedCheckins) {
+      console.log("Using cached")
+      this.setState({venuesInfo: cachedCheckins.venuesInfo, breweriesInfo: cachedCheckins.breweriesInfo});
+    } 
+    else if (userData[username]) {
       this.setState({ venuesInfo: userData[username].venuesInfo });
-    } else {
+    }
+    else {
       this.setState({ loadingCheckins: true, checkinRequestError: false });
 
       const checkinsRequest = await getCheckins(username, token);
@@ -63,6 +69,7 @@ class Main extends Component {
         const { checkins, nextPageUrl } = checkinsRequest;
         this.setUserData(username, organizeByVenues(checkins), organizeByBreweries(checkins))
         await this.getNextCheckins(19, nextPageUrl, token); // Get more 950 checkins
+        localStorage.setItem(username, JSON.stringify(this.state.userData[username]))
 
         this.setState(prevState => ({
           loggedUser: {
@@ -78,7 +85,7 @@ class Main extends Component {
     }
   };
 
-  selectPin = location_id =>
+  selectPin = location_id => 
     this.setState({ selectedLocation: location_id, showLocationDetails: true });
 
   closeLocationDetails = () => this.setState({ showLocationDetails: false });
@@ -204,7 +211,7 @@ class Main extends Component {
         </Modal>
 
         <div className="h-100 w-100">
-          <Map pinLocations={pinLocations} pinType={pinByVenues} onMarkerClick={this.selectPin} />
+          <Map pinLocations={pinLocations} pinByVenues={pinByVenues} onMarkerClick={this.selectPin} />
         </div>
       </div>
     );

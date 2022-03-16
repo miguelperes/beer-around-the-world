@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "google-map-react": "^1.1.2",
+    "pigeon-maps": "^0.19.7",
     "query-string": "^6.4.2",
     "react": "^16.8.5",
     "react-burger-menu": "^2.6.10",
