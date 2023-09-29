@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/beer-around-the-world/precache-manifest.2afe730bea72235d3b012cafbc46e849.js"
+  "/beer-around-the-world/precache-manifest.d607d30945331bcb9013fdb45194af76.js"
 );
 
 workbox.clientsClaim();

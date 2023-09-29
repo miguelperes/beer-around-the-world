@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "6ecc006be236281c317f",
+    "revision": "bf97087094a6b2913692",
     "url": "/beer-around-the-world/static/css/main.49d4ad25.chunk.css"
   },
   {
-    "revision": "6ecc006be236281c317f",
-    "url": "/beer-around-the-world/static/js/main.5504a079.chunk.js"
+    "revision": "bf97087094a6b2913692",
+    "url": "/beer-around-the-world/static/js/main.8b6ae3b9.chunk.js"
   },
   {
     "revision": "972dd3e22452280d40cd",
@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/beer-around-the-world/static/js/2.e2337f23.chunk.js"
   },
   {
-    "revision": "d89ce7acc223c426e0e37d3bff2a0a5e",
+    "revision": "73166da10eee9d2f8de55447ecb9c382",
     "url": "/beer-around-the-world/index.html"
   }
 ];
