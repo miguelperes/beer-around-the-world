@@ -3,7 +3,8 @@ import axios from "axios";
 const MAX_CHECKINS = 50;
 const BASE_ENDPOINT = "https://api.untappd.com/v4";
 const UNTAPPD_ID = process.env.REACT_APP_UNTAPPD_ID;
-const CALLBACK_URL = "https://batw.herokuapp.com/"
+// const CALLBACK_URL = "https://batw.herokuapp.com/"
+const CALLBACK_URL = "https://miguelperes.github.io/beer-around-the-world/"
  
 export const AUTH_URL = `https://untappd.com/oauth/authenticate/?client_id=${UNTAPPD_ID}&response_type=token&redirect_url=${CALLBACK_URL}`;
 
